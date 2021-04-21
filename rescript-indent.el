@@ -1,47 +1,38 @@
-;;; js.el --- Major mode for editing JavaScript  -*- lexical-binding: t -*-
+;;; rescript-indent.el --- Indentation functions for ReScript -*-lexical-binding: t-*-
 
 ;; Copyright (C) 2008-2020 Free Software Foundation, Inc.
 
 ;; Author: Karl Landstrom <karl.landstrom@brgeight.se>
 ;;         Daniel Colascione <dancol@dancol.org>
-;; Maintainer: Daniel Colascione <dancol@dancol.org>
-;; Version: 9
-;; Date: 2009-07-25
-;; Keywords: languages, javascript
+;; Maintainer: John Lee <jjl@pobox.com>
+;; Version: 1
+;; Date: 2021-04-10
+;; Keywords: languages, rescript
 
-;; This file is part of GNU Emacs.
-
-;; GNU Emacs is free software: you can redistribute it and/or modify
+;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation, either version 3 of the License, or
 ;; (at your option) any later version.
 
-;; GNU Emacs is distributed in the hope that it will be useful,
+;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs.  If not, see <https://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-;;; Commentary
 
-;; This is based on Karl Landstrom's barebones javascript-mode. This
-;; is much more robust and works with cc-mode's comment filling
-;; (mostly).
+;; Based heavily (in fact entirely, right now) on js.el from GNU Emacs
+;; So there is a lot of code in here that makes little sense for ReScript, and
+;; sometimes the indentation it supplies will be just plain wrong.
+
+;; The goal for now is just to get vaguely sensible most of the time when you
+;; hit return or tab.  To format your ReScript code properly, use bsc -format
+;; (which you can access, for example, using lsp-mode's lsp-format-buffer).
 ;;
-;; The main features of this JavaScript mode are syntactic
-;; highlighting (enabled with `font-lock-mode' or
-;; `global-font-lock-mode'), automatic indentation and filling of
-;; comments, C preprocessor fontification, and MozRepl integration.
-;;
-;; General Remarks:
-;;
-;; XXX: This mode assumes that block comments are not nested inside block
-;; XXX: comments
-;;
-;; Exported names start with "js-"; private names start with
-;; "js--".
+;; Exported names start with "rescript-"; private names start with
+;; "rescript--".
 
 ;;; Code:
 
