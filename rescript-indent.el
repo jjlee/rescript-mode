@@ -482,49 +482,6 @@ statement spanning multiple lines; otherwise, return nil."
           (goto-char (match-end 0))
           (1+ (current-column)))))))
 
-(defun rescript--indent-in-array-comp (bracket)
-  "Return non-nil if we think we're in an array comprehension.
-In particular, return the buffer position of the first `for' kwd."
-  (let ((end (point)))
-    (save-excursion
-      (goto-char bracket)
-      (when (looking-at "\\[")
-        (forward-char 1)
-        (rescript--forward-syntactic-ws)
-        (if (looking-at "[[{]")
-            (let (forward-sexp-function) ; Use Lisp version.
-              (condition-case nil
-                  (progn
-                    (forward-sexp)       ; Skip destructuring form.
-                    (rescript--forward-syntactic-ws)
-                    (if (and (/= (char-after) ?,) ; Regular array.
-                             (looking-at "for"))
-                        (match-beginning 0)))
-                (scan-error
-                 ;; Nothing to do here.
-                 nil)))
-          ;; To skip arbitrary expressions we need the parser,
-          ;; so we'll just guess at it.
-          (if (and (> end (point)) ; Not empty literal.
-                   (re-search-forward "[^,]]* \\(for\\_>\\)" end t)
-                   ;; Not inside comment or string literal.
-                   (let ((status (parse-partial-sexp bracket (point))))
-                     (and (= 1 (car status))
-                          (not (nth 8 status)))))
-              (match-beginning 1)))))))
-
-(defun rescript--array-comp-indentation (bracket for-kwd)
-  (if (rescript--same-line for-kwd)
-      ;; First continuation line.
-      (save-excursion
-        (goto-char bracket)
-        (forward-char 1)
-        (skip-chars-forward " \t")
-        (current-column))
-    (save-excursion
-      (goto-char for-kwd)
-      (current-column))))
-
 (defconst rescript--line-terminating-arrow-re "=>\\s-*\\(/[/*]\\|$\\)"
   "Regexp matching the last \"=>\" (arrow) token on a line.
 Whitespace and comments around the arrow are ignored.")
@@ -546,15 +503,6 @@ current line is the \"=>\" token (of an arrow function)."
           ((nth 3 parse-status) 0) ; inside string
           ((eq (char-after) ?#) 0)
           ((save-excursion (rescript--beginning-of-macro)) 4)
-          ;; Indent array comprehension continuation lines specially.
-          ((let ((bracket (nth 1 parse-status))
-                 beg)
-             (and bracket
-                  (not (rescript--same-line bracket))
-                  (setq beg (rescript--indent-in-array-comp bracket))
-                  ;; At or after the first loop?
-                  (>= (point) beg)
-                  (rescript--array-comp-indentation bracket beg))))
           ((rescript--chained-expression-p))
           ((rescript--ctrl-statement-indentation))
           ((rescript--multi-line-declaration-indentation))
