@@ -2,7 +2,7 @@
 ;; Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
 
 ;; Version: 0.1.0
-;; Author: Mozilla
+;; Author: John Lee
 ;; Url: https://github.com/jjlee/rescript-mode
 ;; Keywords: languages
 ;; Package-Requires: ((emacs "24.3"))
