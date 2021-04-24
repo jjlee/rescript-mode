@@ -64,7 +64,7 @@ name.")
 
 ;;; User Customization
 
-(defcustom rescript-indent-level 4
+(defcustom rescript-indent-level 2
   "Number of spaces for each indentation step in `rescript-mode'."
   :type 'integer
   :safe 'integerp
