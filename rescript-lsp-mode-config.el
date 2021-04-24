@@ -40,17 +40,15 @@
       (lsp-log message))))
 
 (defun rescript-mode--handle-show-message-request (workspace params)
-  (rescript-mode--window-log-message-request params))
+  (if rescript-mode-prompt-for-build
+      (rescript-mode--window-log-message-request params)))
 
 (defun rescript-mode-register-with-lsp-mode ()
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-stdio-connection rescript-mode-lsp-server-command)
                     :major-modes '(rescript-mode)
                     :notification-handlers (ht ("client/registerCapability" #'ignore))
-                    :request-handlers (ht("window/showMessageRequest"
-                                          (if rescript-mode-prompt-for-build
-                                              #'rescript-mode--handle-show-message-request
-                                            #'ignore)))
+                    :request-handlers (ht("window/showMessageRequest" #'rescript-mode--handle-show-message-request))
                     :priority 1
                     :server-id 'rescript-ls))
   (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript")))
