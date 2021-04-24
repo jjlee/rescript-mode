@@ -140,48 +140,6 @@ Argument WORDS argument to pass to `regexp-opt`."
      (concat "<[/]?" (rescript-re-grab rescript-re-ident) "[^>]*" ">")
      1 font-lock-type-face)))
 
-;; (defun rescript--syntax-propertize-multiline-string (end)
-;;   "Propertize ReScript multiline string.
-;; Argument END marks the end of the string."
-;;   (let ((ppss (syntax-ppss)))
-;;     (when (eq t (nth 3 ppss))
-;;       (let ((key (save-excursion
-;;                    (goto-char (nth 8 ppss))
-;;                    (and (looking-at "{\\([a-z]*\\)|")
-;;                         (match-string 1)))))
-;;         (when (search-forward (format "|%s}" key) end 'move)
-;;           (put-text-property (1- (match-end 0)) (match-end 0)
-;;                              'syntax-table (string-to-syntax "|")))))))
-
-(defun rescript--syntax-propertize-multiline-string (end)
-  "Propertize ReScript multiline string.
-Argument END marks the end of the string."
-  (let ((ppss (syntax-ppss)))
-    (when (eq t (nth 3 ppss))
-      (let ((key (save-excursion
-                   (goto-char (nth 8 ppss))
-                   (and (looking-at "\\([a-z]\\)`")
-                        (match-string 1)))))
-        (when (search-forward (format "`" key) end 'move)
-          (put-text-property (1- (match-end 0)) (match-end 0)
-                             'syntax-table (string-to-syntax "|")))))))
-
-(defun rescript-syntax-propertize-function (start end)
-  "Propertize ReScript function.
-Argument START marks the beginning of the function.
-Argument END marks the end of the function."
-  (goto-char start)
-  (rescript--syntax-propertize-multiline-string end)
-  (funcall
-   (syntax-propertize-rules
-    (rescript--char-literal-rx (1 "\"") (2 "\""))
-    ;; multi line strings
-    ("\\([a-z]\\)`"
-     (1 (prog1 "|"
-          (goto-char (match-end 0))
-          (rescript--syntax-propertize-multiline-string end)))))
-   (point) end))
-
 (defvar rescript-mode-map
   (let ((map (make-sparse-keymap)))
     ;; (define-key map "\C-c\C-a" #'rescript-mode-find-alternate-file)
@@ -194,8 +152,6 @@ Argument END marks the end of the function."
 \\{rescript-mode-map}"
   :keymap rescript-mode-map
 
-  ;; Syntax
-  ;; (setq-local syntax-propertize-function #'rescript-syntax-propertize-function)
   ;; Indentation
   (setq-local indent-line-function 'rescript-indent-line)
   (setq-local comment-start "/* ")
