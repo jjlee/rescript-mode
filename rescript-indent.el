@@ -355,8 +355,7 @@ If invoked while inside a macro, treat the macro as normal text."
                  ;; We might misindent some expressions that would
                  ;; return NaN anyway.  Shouldn't be a problem.
                  (memq (char-before) '(?, ?} ?{)))))
-         ;; “<” isn’t necessarily an operator in JSX.
-         (not (and rescript-jsx-syntax (rescript-jsx--looking-at-start-tag-p))))))
+         )))
 
 (defun rescript--find-newline-backward ()
   "Move backward to the nearest newline that is not in a block comment."
@@ -393,19 +392,14 @@ If invoked while inside a macro, treat the macro as normal text."
       (and (rescript--find-newline-backward)
            (progn
              (skip-chars-backward " \t")
-             (and
-              ;; The “>” at the end of any JSXBoundaryElement isn’t
-              ;; part of a continued expression.
-              (not (and rescript-jsx-syntax (rescript-jsx--looking-back-at-end-tag-p)))
-              (progn
-                (or (bobp) (backward-char))
-                (and (> (point) (point-min))
-                     (save-excursion
-                       (backward-char)
-                       (not (looking-at "[/*]/\\|=>")))
-                     (rescript--looking-at-operator-p)
-                     (and (progn (backward-char)
-                                 (not (looking-at "\\+\\+\\|--\\|/[/*]"))))))))))))
+             (or (bobp) (backward-char))
+             (and (> (point) (point-min))
+                  (save-excursion
+                    (backward-char)
+                    (not (looking-at "[/*]/\\|=>")))
+                  (rescript--looking-at-operator-p)
+                  (and (progn (backward-char)
+                              (not (looking-at "\\+\\+\\|--\\|/[/*]"))))))))))
 
 (defun rescript--skip-term-backward ()
   "Skip a term before point; return t if a term was skipped."
@@ -650,8 +644,6 @@ current line is the \"=>\" token (of an arrow function)."
     (cond ((nth 4 parse-status)    ; inside comment
            (rescript--get-c-offset 'c (nth 8 parse-status)))
           ((nth 3 parse-status) 0) ; inside string
-          ((when (and rescript-jsx-syntax (not rescript-jsx--indent-col))
-             (save-excursion (rescript-jsx--indentation parse-status))))
           ((eq (char-after) ?#) 0)
           ((save-excursion (rescript--beginning-of-macro)) 4)
           ;; Indent array comprehension continuation lines specially.
@@ -689,13 +681,7 @@ current line is the \"=>\" token (of an arrow function)."
                                                   in-switch-p)))
                           (indent
                            (+
-                            (cond
-                             ((and rescript-jsx--indent-attribute-line
-                                   (eq rescript-jsx--indent-attribute-line
-                                       (line-number-at-pos)))
-                              rescript-jsx--indent-col)
-                             (t
-                              (current-column)))
+                            (current-column)
                             (cond (same-indent-p 0)
                                   (continued-expr-p
                                    (+ (* 2 rescript-indent-level)
