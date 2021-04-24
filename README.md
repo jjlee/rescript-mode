@@ -7,10 +7,9 @@ team](https://rescript-lang.org/docs/manual/latest/editor-plugins).
 
 ## How to Get it Working
 
-Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/latest/installation), you need:
+Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/latest/installation) and this code, for a full setup you need:
 
 * Strongly recommended: Emacs 27.0 or newer built with native JSON support, for LSP performance
-* This package, to provide a major mode for things like syntax highlighting ("font lock" in Emacs-ese) and indentation
 * [rescript-vscode](https://github.com/rescript-lang/rescript-vscode) to provide the ReScript LSP server for type information, compiler errors, and completion
 * Currently, [a way to format ReScript code](#formatting) (LSP also provides this, but there is an lsp-mode bug I need to report/fix before this works)
 
@@ -20,7 +19,7 @@ The instructions here assume that you're using [LSP mode](https://emacs-lsp.gith
 
 TODO: bundle this or provide a way of auto-installing it
 
-Fetch the repo from: https://github.com/rescript-lang/rescript-vscode and compile it with:
+Fetch [the rescript repo](https://github.com/rescript-lang/rescript-vscode) and compile it with:
 
     npm run compile
 
@@ -28,12 +27,13 @@ The language server should then be present as `server/out/server.js`
 
 ### Vanilla Emacs
 
-Note that rescript-mode does not depend on `lsp-mode`, it just provides some
-configuration code for it.
+`rescript-mode` itself does not depend on `lsp-mode`.  `lsp-rescript` provides
+configuration code for `lsp-mode`.
 
-Install lsp-mode and using `M-x package-install`.
+Install [lsp-rescript](https://github.com/jjlee/lsp-rescript) (e.g. using `M-x
+package-install` -- you can use things like use-package if you like of course).
 
-Then add the following to your Emacs configuration code (for example to
+Add the following to your Emacs configuration code (for example to
 `~/.emacs`):
 
     ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
@@ -42,7 +42,7 @@ Then add the following to your Emacs configuration code (for example to
      '(lsp-rescript-server-command
        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
     (with-eval-after-load 'rescript-mode
-      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server:
+      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
       (require 'lsp-rescript)
       ;; Enable `lsp-mode` in rescript-mode buffers
       (add-hook 'rescript-mode-hook 'lsp-deferred)
@@ -50,18 +50,35 @@ Then add the following to your Emacs configuration code (for example to
       (require 'lsp-ui)
       (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
 
+Restart Emacs and open a ReScript `.res` file and you should have all the
+features working.
+
+
 ### Spacemacs
 
 TODO: make a configuration layer
 
-Add `rescript-mode` to the `dotspacemacs-additional-packages` section of your
-spacemacs configuration file (`SPC f e d` to find that file) -- it should look
-something like this:
+Add `lsp` to the `dotspacemacs-configuration-layers` section of your spacemacs
+configuration file (`SPC f e d` to find that file) -- it should look something
+like this:
+
+```
+dotspacemacs-configuration-layers
+'(
+  lsp
+  )
+```
+
+Add `rescript-mode` and `lsp-rescript` to the `dotspacemacs-additional-packages`
+section of your spacemacs configuration file -- it should look something like
+this:
 
 ```
 dotspacemacs-additional-packages
 '(
+  lsp-rescript
   rescript-mode
+  )
 ```
 
 Add this to the `dotspacemacs/user-config` section of your spacemacs
@@ -73,8 +90,8 @@ configuration file:
      '(lsp-rescript-server-command
        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
     (with-eval-after-load 'rescript-mode
-      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server:
-      (require 'rescript-lsp-mode-config)
+      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+      (require 'lsp-rescript)
       ;; All I remember is something weird happened if this wasn't there :-)
       (spacemacs|define-jump-handlers rescript-mode)
       ;; Enable `lsp-mode` in rescript-mode buffers
@@ -83,14 +100,17 @@ configuration file:
       (require 'lsp-ui)
       (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
 
+Restart spacemacs (`SPC q r`) and open a ReScript `.res` file and you should
+have all the features working.
+
 
 ### Formatting
 
 You can use a package like
 [`format-all`](https://github.com/lassik/emacs-format-all-the-code) or
 [`reformatter`](https://github.com/purcell/reformatter.el) to get your code
-formatted correctly (i.e. as `bsc -format` formats it -- this is like `gofmt`
-for ReScript).  See [this
+formatted correctly (i.e. as `bsc -format`, soon to be renamed `rescript
+format`, formats it -- this is like `gofmt` for ReScript).  See [this
 thread](https://forum.rescript-lang.org/t/rescript-emacs-support-with-rescript-vscode/1056/14)
 (I've not tried either of these).
 
@@ -130,13 +150,16 @@ you save.
 If you don't see that, `bsc` may not be running on your project.
 
 When you open a `.res` file in your project, you should see a prompt in Emacs
-"Start a build for this project to get the freshest data?".  You can either hit
-return on `Start Build` to say yes to that and the LSP server will start a build
-for you, or `C-g` out of that and run `bsc` yourself however you usually do that
-in your rescript project (in my project I run `npm start`).  If you never want
-to see this prompt you can put this in your configuration:
+`"Start a build for this project to get the freshest data?"`.  You can either
+hit return on `Start Build` to say yes to that and the LSP server will start a
+build for you, or `C-g` out of that and run `bsc` yourself however you usually
+do that in your rescript project (in my project I run `npm start`).  If you
+never want to see this prompt you can put this in your configuration:
 
     (custom-set-variables '(lsp-rescript-prompt-for-build nil))
+
+If you don't see the `"Start a build for this project to get the freshest
+data?"` prompt, you may have a stale `.bsb.lock` lock file in your project.
 
 ### Type Information
 
@@ -160,12 +183,21 @@ docs for the latter for more about that.
 
 ## Known Issues
 
+I've barely used this yet, so probably a lot of things are very broken!
+
 See the github issues, but notably:
 
 * Indentation (note below re formatting vs indentation) is a terrible hack: it's
-  lifted straight from js-mode without any effort to adapt it to ReScript, and
+  lifted straight from js-mode with little effort to adapt it to ReScript, and
   without any JSX support.  Nevertheless, aside from JSX it seems to work OK.
-  This doesn't look like a small task to fix.
+  This doesn't look like a small task to fix, though quite possibly just
+  starting with `js.el` and adding the small amount of code in rescript-mode.el
+  would result in something useable -- but then the likelihood of my fixing any
+  bugs at all would probably drop to zero!  It's also possible that a smaller
+  subset of the JSX support can be extracted -- it's not obvious to me that
+  that's easy though.  So I'm inclined to lean heavily on `bsc -format` code
+  formatting and not worry about JSX indentation until the day our emacs
+  ReScript hero comes.
 * Font lock and indentation are broken for things like `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
   handle the response from rescript-vscode because it uses a range like
@@ -177,8 +209,6 @@ Packaging issues:
 
 * Teach lsp-mode how to install rescript-vscode, or bundle it
 * Add spacemacs layer
-* Upstream configuration to lsp-mode
-
 
 ## Support
 
