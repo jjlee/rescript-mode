@@ -416,31 +416,6 @@ as determined by `back-to-indentation'."
                  (rescript--skip-terms-backward))
         (current-column)))))
 
-(defun rescript--end-of-do-while-loop-p ()
-  "Return non-nil if point is on the \"while\" of a do-while statement.
-Otherwise, return nil.  A braceless do-while statement spanning
-several lines requires that the start of the loop is indented to
-the same column as the current line."
-  (interactive)
-  (save-excursion
-    (save-match-data
-      (when (looking-at "\\s-*\\_<while\\_>")
-	(if (save-excursion
-	      (skip-chars-backward " \t\n}")
-	      (looking-at "[ \t\n]*}"))
-	    (save-excursion
-	      (backward-list) (forward-symbol -1) (looking-at "\\_<do\\_>"))
-	  (rescript--re-search-backward "\\_<do\\_>" (point-at-bol) t)
-	  (or (looking-at "\\_<do\\_>")
-	      (let ((saved-indent (current-indentation)))
-		(while (and (rescript--re-search-backward "^\\s-*\\_<" nil t)
-			    (/= (current-indentation) saved-indent)))
-		(and (looking-at "\\s-*\\_<do\\_>")
-		     (not (rescript--re-search-forward
-			   "\\_<while\\_>" (point-at-eol) t))
-		     (= (current-indentation) saved-indent)))))))))
-
-
 (defun rescript--ctrl-statement-indentation ()
   "Helper function for `rescript--proper-indentation'.
 Return the proper indentation of the current line if it starts
@@ -458,8 +433,7 @@ nil."
                    (skip-syntax-backward " ")
                    (skip-syntax-backward "w_")
                    (looking-at rescript--possibly-braceless-keyword-re))
-                 (memq (char-before) '(?\s ?\t ?\n ?\}))
-                 (not (rescript--end-of-do-while-loop-p))))
+                 (memq (char-before) '(?\s ?\t ?\n ?\}))))
       (save-excursion
         (goto-char (match-beginning 0))
         (+ (current-indentation) rescript-indent-level)))))
