@@ -127,48 +127,6 @@ This applies to function movement, marking, and so on."
   :type 'function
   :group 'rescript)
 
-(defcustom rescript-indent-first-init nil
-  "Non-nil means specially indent the first variable declaration's initializer.
-Normally, the first declaration's initializer is unindented, and
-subsequent declarations have their identifiers aligned with it:
-
-  var o = {
-      foo: 3
-  };
-
-  var o = {
-      foo: 3
-  },
-      bar = 2;
-
-If this option has the value t, indent the first declaration's
-initializer by an additional level:
-
-  var o = {
-          foo: 3
-      };
-
-  var o = {
-          foo: 3
-      },
-      bar = 2;
-
-If this option has the value `dynamic', if there is only one declaration,
-don't indent the first one's initializer; otherwise, indent it.
-
-  var o = {
-      foo: 3
-  };
-
-  var o = {
-          foo: 3
-      },
-      bar = 2;"
-  :version "25.1"
-  :type '(choice (const nil) (const t) (const dynamic))
-  :safe 'symbolp
-  :group 'rescript)
-
 (defcustom rescript-chain-indent nil
   "Use \"chained\" indentation.
 Chained indentation applies when the current line starts with \".\".
@@ -593,37 +551,6 @@ In particular, return the buffer position of the first `for' kwd."
       (goto-char for-kwd)
       (current-column))))
 
-(defun rescript--maybe-goto-declaration-keyword-end (parse-status)
-  "Helper function for `rescript--proper-indentation'.
-Depending on the value of `rescript-indent-first-init', move
-point to the end of a variable declaration keyword so that
-indentation is aligned to that column."
-  (cond
-   ((eq rescript-indent-first-init t)
-    (when (looking-at rescript--declaration-keyword-re)
-      (goto-char (1+ (match-end 0)))))
-   ((eq rescript-indent-first-init 'dynamic)
-    (let ((bracket (nth 1 parse-status))
-          declaration-keyword-end
-          at-closing-bracket-p
-          forward-sexp-function ; Use Lisp version.
-          comma-p)
-      (when (looking-at rescript--declaration-keyword-re)
-        (setq declaration-keyword-end (match-end 0))
-        (save-excursion
-          (goto-char bracket)
-          (setq at-closing-bracket-p
-                (condition-case nil
-                    (progn
-                      (forward-sexp)
-                      t)
-                  (error nil)))
-          (when at-closing-bracket-p
-            (while (forward-comment 1))
-            (setq comma-p (looking-at-p ","))))
-        (when comma-p
-          (goto-char (1+ declaration-keyword-end))))))))
-
 (defconst rescript--line-terminating-arrow-re "=>\\s-*\\(/[/*]\\|$\\)"
   "Regexp matching the last \"=>\" (arrow) token on a line.
 Whitespace and comments around the arrow are ignored.")
@@ -672,7 +599,6 @@ current line is the \"=>\" token (of an arrow function)."
                    (skip-syntax-backward " ")
                    (when (eq (char-before) ?\)) (backward-list))
                    (back-to-indentation)
-                   (rescript--maybe-goto-declaration-keyword-end parse-status)
                    (let* ((in-switch-p (unless same-indent-p
                                          (looking-at "\\_<switch\\_>")))
                           (same-indent-p (or same-indent-p
