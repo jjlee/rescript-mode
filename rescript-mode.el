@@ -18,6 +18,11 @@
 
 ;;; Code:
 
+(defgroup rescript nil
+  "Support for ReScript code."
+  :link '(url-link "https://rescript-lang.org/")
+  :group 'languages)
+
 (require 'rescript-indent)
 
 (defconst rescript-re-ident "[[:word:][:multibyte:]_][[:word:][:multibyte:]_[:digit:]]*")
@@ -47,11 +52,6 @@
     (modify-syntax-entry ?\^m "> b"   table)
 
     table))
-
-(defgroup rescript nil
-  "Support for ReScript code."
-  :link '(url-link "https://rescript-lang.org/")
-  :group 'languages)
 
 (defcustom rescript-mode-hook nil
   "Hook called by `rescript-mode'."
