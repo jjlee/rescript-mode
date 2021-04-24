@@ -319,17 +319,16 @@ If invoked while inside a macro, treat the macro as normal text."
 
 (defconst rescript--possibly-braceless-keyword-re
   (rescript--regexp-opt-symbol
-   '("catch" "do" "else" "finally" "for" "if" "try" "while" "with"
-     "each"))
+   '("catch" "else" "finally" "for" "if" "try" "while"))
   "Regexp matching keywords optionally followed by an opening brace.")
 
 (defconst rescript--declaration-keyword-re
-  (regexp-opt '("var" "let" "const") 'words)
+  (regexp-opt '("let") 'words)
   "Regular expression matching variable declaration keywords.")
 
 (defconst rescript--indent-operator-re
   (concat "[-+*/%<>&^|?:.]\\([^-+*/.]\\|$\\)\\|!?=\\|"
-          (rescript--regexp-opt-symbol '("in" "instanceof")))
+          (rescript--regexp-opt-symbol '("in" "to" "downto")))
   "Regexp matching operators that affect indentation of continued expressions.")
 
 (defun rescript--looking-at-operator-p ()
