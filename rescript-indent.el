@@ -24,8 +24,8 @@
 
 
 ;; Based heavily (in fact entirely, right now) on js.el from GNU Emacs
-;; So there is a lot of code in here that makes little sense for ReScript, and
-;; sometimes the indentation it supplies will be just plain wrong.
+;; There is very likely still a lot of code in here that makes little sense for
+;; ReScript, and sometimes the indentation it supplies will be just plain wrong.
 
 ;; The goal for now is just to get vaguely sensible most of the time when you
 ;; hit return or tab.  To format your ReScript code properly, use bsc -format
@@ -39,18 +39,18 @@
 ;;; Constants
 
 (defconst rescript--name-start-re "[[:alpha:]_$]"
-  "Regexp matching the start of a JavaScript identifier, without grouping.")
+  "Regexp matching the start of a ReScript identifier, without grouping.")
 
 (defconst rescript--name-re (concat rescript--name-start-re
                               "\\(?:\\s_\\|\\sw\\)*")
-  "Regexp matching a JavaScript identifier, without grouping.")
+  "Regexp matching a ReScript identifier, without grouping.")
 
 (defconst rescript--objfield-re (concat rescript--name-re ":")
-  "Regexp matching the start of a JavaScript object field.")
+  "Regexp matching the start of a ReScript object field.")
 
 (defconst rescript--dotted-name-re
   (concat rescript--name-re "\\(?:\\." rescript--name-re "\\)*")
-  "Regexp matching a dot-separated sequence of JavaScript names.")
+  "Regexp matching a dot-separated sequence of ReScript names.")
 
 (defconst rescript--opt-cpp-start "^\\s-*#\\s-*\\([[:alnum:]]+\\)"
   "Regexp matching the prefix of a cpp directive.
@@ -332,7 +332,7 @@ If invoked while inside a macro, treat the macro as normal text."
   "Regexp matching operators that affect indentation of continued expressions.")
 
 (defun rescript--looking-at-operator-p ()
-  "Return non-nil if point is on a JavaScript operator, other than a comma."
+  "Return non-nil if point is on a ReScript operator, other than a comma."
   (save-match-data
     (and (looking-at rescript--indent-operator-re)
          (or (not (eq (char-after) ?:))
