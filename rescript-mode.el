@@ -197,7 +197,7 @@ Argument END marks the end of the function."
   ;; Syntax
   ;; (setq-local syntax-propertize-function #'rescript-syntax-propertize-function)
   ;; Indentation
-  (setq-local indent-line-function 'rescript-jsx-indent-line)
+  (setq-local indent-line-function 'rescript-indent-line)
   (setq-local comment-start "/* ")
   (setq-local comment-end   " */")
   (setq-local indent-tabs-mode nil)
