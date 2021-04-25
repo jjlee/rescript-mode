@@ -38,6 +38,8 @@
 
 ;;; Constants
 
+(require 'cc-mode)
+
 (defconst rescript--name-start-re "[[:alpha:]_$]"
   "Regexp matching the start of a ReScript identifier, without grouping.")
 
