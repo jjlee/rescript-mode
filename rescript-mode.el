@@ -170,8 +170,7 @@ Argument WORDS argument to pass to `regexp-opt`."
   (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
   (setq-local comment-end "")
   ;; Fonts
-  (setq-local font-lock-defaults '(rescript-font-lock-keywords))
-  )
+  (setq-local font-lock-defaults '(rescript-font-lock-keywords)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.resi?$" . rescript-mode))
