@@ -166,6 +166,9 @@ Argument WORDS argument to pass to `regexp-opt`."
   (setq-local require-final-newline t)
   (setq-local normal-auto-fill-function nil)
   (setq-local comment-multi-line t)
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
+  (setq-local comment-end "")
   ;; Fonts
   (setq-local font-lock-defaults '(rescript-font-lock-keywords))
   )
