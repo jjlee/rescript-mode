@@ -19,6 +19,10 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'rx)
+                   (require 'compile)
+                   (require 'url-vars))
+
 (defgroup rescript nil
   "Support for ReScript code."
   :link '(url-link "https://rescript-lang.org/")
@@ -27,10 +31,6 @@
 (require 'rescript-indent)
 
 (defconst rescript-re-ident "[[:word:][:multibyte:]_][[:word:][:multibyte:]_[:digit:]]*")
-
-(eval-when-compile (require 'rx)
-                   (require 'compile)
-                   (require 'url-vars))
 
 ;; Syntax definitions and helpers
 (defvar rescript-mode-syntax-table

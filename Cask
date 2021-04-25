@@ -1,4 +1,9 @@
 (source gnu)
 (source melpa)
 
-(depends-on "ert-runner")
+(package-file "rescript-mode.el")
+
+(files "*.el"(:exclude ".dir-locals.el"))
+
+(development
+ (depends-on "ert-runner"))
