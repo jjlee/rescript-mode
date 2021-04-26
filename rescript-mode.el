@@ -1,5 +1,6 @@
 ;;; rescript-mode.el --- A major mode for editing ReScript -*-lexical-binding: t-*-
 ;; Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
+;; Copyright (C) 2020 John Lee <jjl@pobox.com>
 
 ;; Version: 0.1.0
 ;; Author: John Lee
@@ -9,12 +10,12 @@
 
 ;; This file is NOT part of GNU Emacs.
 
-;; This file is distributed under the terms of both the MIT license and the
-;; Apache License (version 2.0).
-
 ;;; Commentary:
 ;; This project provides useful functions and helpers for developing code
 ;; using the ReScript programming language
+
+;; Exported names start with "rescript-"; private names start with
+;; "rescript--".
 
 ;;; Code:
 
@@ -180,5 +181,4 @@ Argument WORDS argument to pass to `regexp-opt`."
   (rescript-mode))
 
 (provide 'rescript-mode)
-
 ;;; rescript-mode.el ends here

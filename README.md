@@ -38,12 +38,12 @@ Then add the following to your Emacs configuration code (for example to
 
     ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
     ;; (you'll have to adjust the path here to match your local system):
-    (custom-set-variables '(rescript-mode-lsp-server-command
-        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+    (custom-set-variables
+     '(lsp-rescript-server-command
+       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
     (with-eval-after-load 'rescript-mode
       ;; Tell `lsp-mode` about the `rescript-vscode` LSP server:
-      (require 'rescript-lsp-mode-config)
-      (rescript-mode-register-with-lsp-mode)
+      (require 'lsp-rescript)
       ;; Enable `lsp-mode` in rescript-mode buffers
       (add-hook 'rescript-mode-hook 'lsp-deferred)
       ;; Enable display of type information in rescript-mode buffers
@@ -69,12 +69,12 @@ configuration file:
 
     ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
     ;; (you'll have to adjust the path here to match your local system):
-    (custom-set-variables '(rescript-mode-lsp-server-command
-        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+    (custom-set-variables
+     '(lsp-rescript-server-command
+       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
     (with-eval-after-load 'rescript-mode
       ;; Tell `lsp-mode` about the `rescript-vscode` LSP server:
       (require 'rescript-lsp-mode-config)
-      (rescript-mode-register-with-lsp-mode)
       ;; All I remember is something weird happened if this wasn't there :-)
       (spacemacs|define-jump-handlers rescript-mode)
       ;; Enable `lsp-mode` in rescript-mode buffers
@@ -136,7 +136,7 @@ for you, or `C-g` out of that and run `bsc` yourself however you usually do that
 in your rescript project (in my project I run `npm start`).  If you never want
 to see this prompt you can put this in your configuration:
 
-    (custom-set-variables '(rescript-mode-prompt-for-build nil))
+    (custom-set-variables '(lsp-rescript-prompt-for-build nil))
 
 ### Type Information
 

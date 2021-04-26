@@ -565,5 +565,4 @@ current line is the \"=>\" token (of an arrow function)."
       (when (> offset 0) (forward-char offset)))))
 
 (provide 'rescript-indent)
-
 ;; rescript-indent.el ends here
