@@ -33,8 +33,7 @@
 ;; ReScript, and sometimes the indentation it supplies will be just plain wrong.
 
 ;; The goal for now is just to get vaguely sensible most of the time when you
-;; hit return or tab.  To format your ReScript code properly, use bsc -format
-;; (which you can access, for example, using lsp-mode's lsp-format-buffer).
+;; hit return or tab.  To format your ReScript code properly, use bsc -format.
 ;;
 ;; Exported names start with "rescript-"; private names start with
 ;; "rescript--".
