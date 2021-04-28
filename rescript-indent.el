@@ -1,6 +1,7 @@
 ;;; rescript-indent.el --- Indentation functions for ReScript -*-lexical-binding: t-*-
 
 ;; Copyright (C) 2008-2020 Free Software Foundation, Inc.
+;; Copyright (C) 2021 John Lee <jjl@pobox.com>
 
 ;; Author: Karl Landstrom <karl.landstrom@brgeight.se>
 ;;         Daniel Colascione <dancol@dancol.org>

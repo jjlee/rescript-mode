@@ -1,6 +1,6 @@
 ;;; rescript-mode.el --- A major mode for editing ReScript -*-lexical-binding: t-*-
 ;; Portions Copyright (c) 2015-present, Facebook, Inc. All rights reserved.
-;; Copyright (C) 2020 John Lee <jjl@pobox.com>
+;; Copyright (C) 2021 John Lee <jjl@pobox.com>
 
 ;; Version: 0.1.0
 ;; Author: John Lee
