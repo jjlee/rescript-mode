@@ -26,17 +26,18 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-;;; Commentary
+;;; Commentary:
 
 ;; Based heavily (in fact entirely, right now) on js.el from GNU Emacs
 ;; There is very likely still a lot of code in here that makes little sense for
 ;; ReScript, and sometimes the indentation it supplies will be just plain wrong.
-
+;;
 ;; The goal for now is just to get vaguely sensible most of the time when you
 ;; hit return or tab.  To format your ReScript code properly, use bsc -format.
 ;;
 ;; Exported names start with "rescript-"; private names start with
 ;; "rescript--".
+
 
 ;;; Code:
 
@@ -571,4 +572,5 @@ current line is the \"=>\" token (of an arrow function)."
       (when (> offset 0) (forward-char offset)))))
 
 (provide 'rescript-indent)
-;; rescript-indent.el ends here
+
+;;; rescript-indent.el ends here
