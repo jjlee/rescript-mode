@@ -26,6 +26,8 @@
 ;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+;;; Commentary
+
 ;; Based heavily (in fact entirely, right now) on js.el from GNU Emacs
 ;; There is very likely still a lot of code in here that makes little sense for
 ;; ReScript, and sometimes the indentation it supplies will be just plain wrong.
