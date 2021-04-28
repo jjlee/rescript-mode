@@ -120,38 +120,28 @@
                  (not (any "'\\")))
              (group "'")))))
 
-(defun rescript-re-word (inner)
-  "Build a word regexp given INNER."
-  (concat "\\<" inner "\\>"))
-
-(defun rescript-re-grab (inner)
+(defun rescript--re-grab (inner)
   "Build a grab regexp given INNER."
   (concat "\\(" inner "\\)"))
 
-(defun rescript-regexp-opt-symbols (words)
-  "Like `(regexp-opt words 'symbols)`, but will work on Emacs 23.
-See rust-mode PR #42.
-Argument WORDS argument to pass to `regexp-opt`."
-  (concat "\\_<" (regexp-opt words t) "\\_>"))
-
 ;;; Syntax highlighting for Rescript
 (defvar rescript-font-lock-keywords
-  `((,(rescript-regexp-opt-symbols rescript-mode-keywords) . font-lock-keyword-face)
-    (,(rescript-regexp-opt-symbols rescript-special-types) . font-lock-builtin-face)
-    (,(rescript-regexp-opt-symbols rescript-mode-consts) . font-lock-constant-face)
+  `((,(regexp-opt rescript-mode-keywords 'symbols) . font-lock-keyword-face)
+    (,(regexp-opt rescript-special-types 'symbols) . font-lock-builtin-face)
+    (,(regexp-opt rescript-mode-consts 'symbols) . font-lock-constant-face)
 
     (,rescript-camel-case 1 font-lock-type-face)
 
     ;; Field names like `foo:`, highlight excluding the :
-    (,(concat (rescript-re-grab rescript-re-ident) ":[^:]") 1 font-lock-variable-name-face)
+    (,(concat (rescript--re-grab rescript-re-ident) ":[^:]") 1 font-lock-variable-name-face)
     ;; Module names like `foo::`, highlight including the ::
-    (,(rescript-re-grab (concat rescript-re-ident "::")) 1 font-lock-type-face)
+    (,(rescript--re-grab (concat rescript-re-ident "::")) 1 font-lock-type-face)
     ;; Name punned labeled args like ::foo
-    (,(concat "[[:space:]]+" (rescript-re-grab (concat "::" rescript-re-ident))) 1 font-lock-type-face)
+    (,(concat "[[:space:]]+" (rescript--re-grab (concat "::" rescript-re-ident))) 1 font-lock-type-face)
 
     ;; TODO jsx attribs?
     (,
-     (concat "<[/]?" (rescript-re-grab rescript-re-ident) "[^>]*" ">")
+     (concat "<[/]?" (rescript--re-grab rescript-re-ident) "[^>]*" ">")
      1 font-lock-type-face)))
 
 (defvar rescript-mode-map
