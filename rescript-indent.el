@@ -3,13 +3,6 @@
 ;; Copyright (C) 2008-2020 Free Software Foundation, Inc.
 ;; Copyright (C) 2021 John Lee <jjl@pobox.com>
 
-;; Author: Karl Landstrom <karl.landstrom@brgeight.se>
-;;         Daniel Colascione <dancol@dancol.org>
-;; Maintainer: John Lee <jjl@pobox.com>
-;; Version: 1
-;; Date: 2021-04-10
-;; Keywords: languages, rescript
-
 ;; This file is NOT part of GNU Emacs.
 
 ;; This program is free software: you can redistribute it and/or modify

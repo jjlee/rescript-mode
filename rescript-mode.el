@@ -3,9 +3,12 @@
 ;; Copyright (C) 2021 John Lee <jjl@pobox.com>
 
 ;; Version: 0.1.0
-;; Author: John Lee
+;; Author: Karl Landstrom <karl.landstrom@brgeight.se>
+;;         Daniel Colascione <dancol@dancol.org>
+;;         John Lee <jjl@pobox.com>
+;; Maintainer: John Lee <jjl@pobox.com>
 ;; Url: https://github.com/jjlee/rescript-mode
-;; Keywords: languages
+;; Keywords: languages, rescript
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -26,7 +29,9 @@
 ;;; Commentary:
 ;; This project provides useful functions and helpers for developing code
 ;; using the ReScript programming language
-
+;;
+;; The indentation code comes from js.el.
+;;
 ;; Exported names start with "rescript-"; private names start with
 ;; "rescript--".
 
