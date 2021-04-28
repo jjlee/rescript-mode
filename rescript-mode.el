@@ -183,12 +183,5 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.resi?$" . rescript-mode))
 
-(defun rescript-mode-reload ()
-  "Reload Rescript mode."
-  (interactive)
-  (unload-feature 'rescript-mode)
-  (require 'rescript-mode)
-  (rescript-mode))
-
 (provide 'rescript-mode)
 ;;; rescript-mode.el ends here
