@@ -213,16 +213,16 @@ I've barely used this yet, so probably a lot of things are very broken!
 See the github issues, but notably:
 
 * Indentation (note below re formatting vs indentation) is a terrible hack: it's
-  lifted straight from js-mode with little effort to adapt it to ReScript, and
-  without any JSX support.  Nevertheless, aside from JSX it seems to work OK.
-  This doesn't look like a small task to fix, though quite possibly just
-  starting with `js.el` and adding the small amount of code in rescript-mode.el
-  would result in something useable -- but then the likelihood of my fixing any
-  bugs at all would probably drop to zero!  It's also possible that a smaller
-  subset of the JSX support can be extracted -- it's not obvious to me that
-  that's easy though.  So I'm inclined to lean heavily on `bsc -format` code
-  formatting and not worry about JSX indentation until the day our emacs
-  ReScript hero comes.
+  lifted straight from `js-mode` (`js.el`) with little effort to adapt it to
+  ReScript, and without any JSX support.  Nevertheless, aside from JSX it seems
+  to work OK.  This doesn't look like a small task to fix, though quite possibly
+  just starting with `js.el` and adding the small amount of code in
+  rescript-mode.el would result in something useable -- but then the likelihood
+  of my fixing any bugs at all would probably drop to zero!  It's also possible
+  that a smaller subset of the JSX support can be extracted -- it's not obvious
+  to me that that's easy though.  So I'm inclined to lean heavily on `bsc
+  -format` code formatting and not worry about JSX indentation until the day our
+  Emacs ReScript hero comes.
 * Font lock and indentation are broken for things like `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
   handle the response from rescript-vscode because it uses a range like
@@ -239,8 +239,8 @@ Packaging issues:
 
 Please do not report issues related to editor support with Emacs upstream to the
 ReScript or rescript-vscode projects (neither on the forum nor the github
-issues).  For now please use github issues on this project as a place to discuss
-Emacs ReScript support.
+issues).  For now please use github issues or github discussions on this project
+as a place to discuss Emacs ReScript support.
 
 Emacs is NOT SUPPORTED by the ReScript core team, nor rescript-vscode. The core
 ReScript team’s focus for editor support is currently on supporting VS Code and
@@ -248,7 +248,7 @@ Sublime Text well. So, if you want something that you can be confident is going
 to work smoothly and will not go away, use one of the editors listed as
 supported by the core ReScript team (currently VS Code and Sublime Text). In
 particular, the Emacs support here depends on the LSP server from
-rescript-vscode and its --stdio switch, neither of which are officially
+rescript-vscode and its `--stdio` switch, neither of which are officially
 supported and could be removed in a later version.
 
 So if you have problems with Emacs and ReScript, please report your issues here,
