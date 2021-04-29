@@ -155,6 +155,9 @@ These errors only show up when you save.
 
 If you don't see that, `bsb` may not be running on your project.
 
+To provide these UI for these errors, LSP mode falls back to `flymake` if
+`flycheck` is not installed, so it's recommended to install the latter.
+
 When you open a `.res` file in your project, you should see a prompt in Emacs in
 the minibuffer `"Start a build for this project to get the freshest data?"`.
 You can either hit return on `Start Build` to say yes to that and the LSP server
