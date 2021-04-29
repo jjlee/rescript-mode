@@ -151,8 +151,7 @@ You should see any errors show up via flycheck -- for me they look like this:
 
 ![Flycheck error](./error.png)
 
-With lsp-mode at the time of writing, it seems these errors only show up when
-you save.
+These errors only show up when you save.
 
 If you don't see that, `bsc` may not be running on your project.
 
