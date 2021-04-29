@@ -256,5 +256,3 @@ not upstream with ReScript or rescript-vscode and please don’t complain if you
 used ReScript with Emacs and had a bad time – if you did that, you’re going it
 alone and you really didn’t try the official ReScript experience – that’s unfair
 and a good way to annoy everybody.
-
-This code is unpolished, expect to run into issues if you choose to use it.
