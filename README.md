@@ -174,7 +174,8 @@ If you never want to see this prompt you can put this in your configuration:
     (custom-set-variables '(lsp-rescript-prompt-for-build nil))
 
 If you don't see the `"Start a build for this project to get the freshest
-data?"` prompt, you may have a stale `.bsb.lock` lock file in your project.
+data?"` prompt, that may be because a build is already running somehow, or you
+may have a stale `.bsb.lock` lock file in your project.
 
 ### Type Information
 
