@@ -188,6 +188,15 @@ off and just use `lsp-ui-doc-glance` every time you want to see it.
 docs for the latter for more about that.
 
 
+## Problems
+
+If you run into problems, try this:
+
+* Kill any `bsb` processes
+* Remove any .bsb.lock file in your project
+* `M-x revert-buffer` on the .res file you're trying to edit
+
+
 ## Known Issues
 
 I've barely used this yet, so probably a lot of things are very broken!
