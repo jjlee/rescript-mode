@@ -28,13 +28,15 @@ The language server should then be present as `server/out/server.js`
 ### Vanilla Emacs
 
 `rescript-mode` itself does not depend on `lsp-mode`.  `lsp-rescript` provides
-configuration code for `lsp-mode`.
+configuration code for `lsp-mode` and depends on `rescript-mode`.
 
-Install [lsp-rescript](https://github.com/jjlee/lsp-rescript) (e.g. using `M-x
-package-install` -- you can use things like use-package if you like of course).
+Install the following packages(e.g. using `M-x package-install` -- you can use
+things like use-package if you like of course):
 
-Add the following to your Emacs configuration code (for example to
-`~/.emacs`):
+* lsp-rescript
+* lsp-ui
+
+Add the following to your Emacs configuration code (for example to `~/.emacs`):
 
     ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
     ;; (you'll have to adjust the path here to match your local system):
@@ -52,6 +54,11 @@ Add the following to your Emacs configuration code (for example to
 
 Restart Emacs and open a ReScript `.res` file and you should have all the
 features working.
+
+Note that the vanilla Emacs handles the LSP prompt for `"Start a build for this
+project to get the freshest data?"` on opening a ReScript file in a rather
+unfriendly way: you have to hit `TAB` to see the single possible `Start a Build`
+response, then hit return.
 
 
 ### Spacemacs
