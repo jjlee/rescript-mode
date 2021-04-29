@@ -153,12 +153,12 @@ You should see any errors show up via flycheck -- for me they look like this:
 
 These errors only show up when you save.
 
-If you don't see that, `bsc` may not be running on your project.
+If you don't see that, `bsb` may not be running on your project.
 
 When you open a `.res` file in your project, you should see a prompt in Emacs in
 the minibuffer `"Start a build for this project to get the freshest data?"`.
 You can either hit return on `Start Build` to say yes to that and the LSP server
-will start a build for you, or `C-g` out of that and run `bsc` yourself however
+will start a build for you, or `C-g` out of that and run `bsb` yourself however
 you usually do that in your rescript project (in my project I run `npm start`).
 
 You may find the UI here (how the `Start Build` option is presented) is a bit
