@@ -155,12 +155,18 @@ These errors only show up when you save.
 
 If you don't see that, `bsc` may not be running on your project.
 
-When you open a `.res` file in your project, you should see a prompt in Emacs
-`"Start a build for this project to get the freshest data?"`.  You can either
-hit return on `Start Build` to say yes to that and the LSP server will start a
-build for you, or `C-g` out of that and run `bsc` yourself however you usually
-do that in your rescript project (in my project I run `npm start`).  If you
-never want to see this prompt you can put this in your configuration:
+When you open a `.res` file in your project, you should see a prompt in Emacs in
+the minibuffer `"Start a build for this project to get the freshest data?"`.
+You can either hit return on `Start Build` to say yes to that and the LSP server
+will start a build for you, or `C-g` out of that and run `bsc` yourself however
+you usually do that in your rescript project (in my project I run `npm start`).
+
+You may find the UI here (how the `Start Build` option is presented) is a bit
+different from how I describe it depending if you're using vanilla emacs or some
+configuration that uses a package like `ivy` or `helm` that overrides the
+behaviour of `completing-read`.
+
+If you never want to see this prompt you can put this in your configuration:
 
     (custom-set-variables '(lsp-rescript-prompt-for-build nil))
 
