@@ -40,9 +40,9 @@ Add the following to your Emacs configuration code (for example to `~/.emacs`):
 
     ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
     ;; (you'll have to adjust the path here to match your local system):
-    (custom-set-variables
-     '(lsp-rescript-server-command
-       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
+    (customize-set-variable
+     'lsp-rescript-server-command
+       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
     (with-eval-after-load 'rescript-mode
       ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
       (require 'lsp-rescript)
