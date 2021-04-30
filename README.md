@@ -24,7 +24,7 @@ compile it following [the build documentation
 there](https://github.com/rescript-lang/rescript-vscode/blob/master/CONTRIBUTING.md#install-dependencies).
 
 The language server should then be present as `server/out/server.js` (and in
-newer rescript-vscode versions, also the analysis native
+newer rescript-vscode versions, also the analysis native binary
 `analysis/rescript-editor-analysis.exe`).
 
 ### Vanilla Emacs
