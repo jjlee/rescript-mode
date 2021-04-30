@@ -40,19 +40,21 @@ things like use-package if you like of course):
 
 Add the following to your Emacs configuration code (for example to `~/.emacs`):
 
-    ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
-    ;; (you'll have to adjust the path here to match your local system):
-    (customize-set-variable
-     'lsp-rescript-server-command
-       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
-    (with-eval-after-load 'rescript-mode
-      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
-      (require 'lsp-rescript)
-      ;; Enable `lsp-mode` in rescript-mode buffers
-      (add-hook 'rescript-mode-hook 'lsp-deferred)
-      ;; Enable display of type information in rescript-mode buffers
-      (require 'lsp-ui)
-      (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
+```elisp
+;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
+;; (you'll have to adjust the path here to match your local system):
+(customize-set-variable
+  'lsp-rescript-server-command
+    '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+(with-eval-after-load 'rescript-mode
+  ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+  (require 'lsp-rescript)
+  ;; Enable `lsp-mode` in rescript-mode buffers
+  (add-hook 'rescript-mode-hook 'lsp-deferred)
+  ;; Enable display of type information in rescript-mode buffers
+  (require 'lsp-ui)
+  (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
+```
 
 Restart Emacs and open a ReScript `.res` file and you should have all the
 features working.
@@ -71,7 +73,7 @@ Add `lsp` to the `dotspacemacs-configuration-layers` section of your spacemacs
 configuration file (`SPC f e d` to find that file) -- it should look something
 like this:
 
-```
+```elisp
 dotspacemacs-configuration-layers
 '(
   lsp
@@ -82,7 +84,7 @@ Add `rescript-mode` and `lsp-rescript` to the `dotspacemacs-additional-packages`
 section of your spacemacs configuration file -- it should look something like
 this:
 
-```
+```elisp
 dotspacemacs-additional-packages
 '(
   lsp-rescript
@@ -93,21 +95,23 @@ dotspacemacs-additional-packages
 Add this to the `dotspacemacs/user-config` section of your spacemacs
 configuration file:
 
-    ;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
-    ;; (you'll have to adjust the path here to match your local system):
-    (custom-set-variables
-     '(lsp-rescript-server-command
-       '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
-    (with-eval-after-load 'rescript-mode
-      ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
-      (require 'lsp-rescript)
-      ;; All I remember is something weird happened if this wasn't there :-)
-      (spacemacs|define-jump-handlers rescript-mode)
-      ;; Enable `lsp-mode` in rescript-mode buffers
-      (add-hook 'rescript-mode-hook 'lsp-deferred)
-      ;; Enable display of type information in rescript-mode buffers
-      (require 'lsp-ui)
-      (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
+```elisp
+;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
+;; (you'll have to adjust the path here to match your local system):
+(custom-set-variables
+  '(lsp-rescript-server-command
+    '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
+(with-eval-after-load 'rescript-mode
+  ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+  (require 'lsp-rescript)
+  ;; All I remember is something weird happened if this wasn't there :-)
+  (spacemacs|define-jump-handlers rescript-mode)
+  ;; Enable `lsp-mode` in rescript-mode buffers
+  (add-hook 'rescript-mode-hook 'lsp-deferred)
+  ;; Enable display of type information in rescript-mode buffers
+  (require 'lsp-ui)
+  (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
+```
 
 Restart spacemacs (`SPC q r`) and open a ReScript `.res` file and you should
 have all the features working.
