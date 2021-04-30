@@ -10,7 +10,7 @@ team](https://rescript-lang.org/docs/manual/latest/editor-plugins).
 Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/latest/installation) and this code, for a full setup you need:
 
 * Strongly recommended: Emacs 27.0 or newer built with native JSON support, for LSP performance
-* [rescript-vscode](https://github.com/rescript-lang/rescript-vscode) to provide the ReScript LSP server for type information, compiler errors, and completion
+* [rescript-vscode](https://github.com/rescript-lang/rescript-vscode) to provide the ReScript LSP server for type information, compiler errors, completion, and jump to definition/find references
 * Currently, [a way to format ReScript code](#formatting) (LSP also provides this, but there is an lsp-mode bug I need to report/fix before this works)
 
 The instructions here assume that you're using [LSP mode](https://emacs-lsp.github.io/lsp-mode/).  [eglot](https://github.com/joaotavora/eglot) may work too, I haven't tried it.
@@ -203,6 +203,13 @@ off and just use `lsp-ui-doc-glance` every time you want to see it.
 
 `lsp-mode`'s completion UI is provided by `company-mode`, so take a look at the
 docs for the latter for more about that.
+
+### Jump to Definition / Find References
+
+You can use functions like `lsp-find-definition` and `lsp-find-references`, or
+equivalent functions like `xref-find-definitions` and `xref-find-references`.
+
+In spacemacs I think `, g g` etc. end up using those functions.
 
 
 ## Problems
