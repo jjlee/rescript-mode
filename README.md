@@ -214,11 +214,19 @@ In spacemacs I think `, g g` etc. end up using those functions.
 
 ## Problems
 
-If you run into problems, try this:
+If you run into problems with display of compilation errors
+(`flycheck`/`flymake` errors), try this to get rid of any stale ReScript build:
 
 * Kill any `bsb` processes
 * Remove any .bsb.lock file in your project
 * `M-x revert-buffer` on the .res file you're trying to edit
+
+If you run into problems with other things, you can try killing the LSP server,
+which will look something like this:
+
+```/path/to/rescript-vscode/bin/node /path/to/rescript-vscode/server/out/server.js --stdio```
+
+and then if LSP doesn't automatically prompt you to restart the server, `M-x lsp`.
 
 
 ## Known Issues
