@@ -19,11 +19,13 @@ The instructions here assume that you're using [LSP mode](https://emacs-lsp.gith
 
 TODO: bundle this or provide a way of auto-installing it
 
-Fetch [the rescript repo](https://github.com/rescript-lang/rescript-vscode) and compile it with:
+Fetch [the rescript repo](https://github.com/rescript-lang/rescript-vscode) and
+compile it following [the build documentation
+there](https://github.com/rescript-lang/rescript-vscode/blob/master/CONTRIBUTING.md#install-dependencies).
 
-    npm run compile
-
-The language server should then be present as `server/out/server.js`
+The language server should then be present as `server/out/server.js` (and in
+newer rescript-vscode versions, also the analysis native
+`analysis/rescript-editor-analysis.exe`).
 
 ### Vanilla Emacs
 
