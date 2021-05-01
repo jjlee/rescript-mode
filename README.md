@@ -19,13 +19,21 @@ The instructions here assume that you're using [LSP mode](https://emacs-lsp.gith
 
 TODO: bundle this or provide a way of auto-installing it
 
-Fetch [the rescript repo](https://github.com/rescript-lang/rescript-vscode) and
-compile it following [the build documentation
+* To build from source, fetch [the rescript
+repo](https://github.com/rescript-lang/rescript-vscode) and compile it following
+[the build documentation
 there](https://github.com/rescript-lang/rescript-vscode/blob/master/CONTRIBUTING.md#install-dependencies).
-
 The language server should then be present as `server/out/server.js` (and in
 newer rescript-vscode versions, also the analysis native binary
 `analysis/rescript-editor-analysis.exe`).
+
+* Alternatively, you can download and unzip a release `.vsix` from
+[here](https://github.com/rescript-lang/rescript-vscode/releases) to use a
+prebuilt server.  Again note that though it's just the `server.js` whose path
+you should use in `'lsp-rescript-server-command`, in recent releases you do need
+to keep the whole `server` directory intact so that you also have
+`rescript-editor-analysis.exe` at a path relative to `server.js` in its correct
+production build location.
 
 ### Vanilla Emacs
 
