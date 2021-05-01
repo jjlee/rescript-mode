@@ -215,11 +215,26 @@ docs for the latter for more about that.
 
 ### Jump to Definition / Find References
 
-You can use functions like `lsp-find-definition` and `lsp-find-references`, or
-equivalent functions like `xref-find-definitions` and `xref-find-references`.
+You can use functions like `lsp-find-definition` and `lsp-find-references`.
 
-In spacemacs I think `, g g` etc. end up using those functions.
+I believe functions like `xref-find-definitions` and `xref-find-references` also
+end up using LSP and seem equivalent to the LSP functions for ReScript purposes.
+`lsp-ui-peek-find-definitions` also seems equivalent to `lsp-find-definition`.
 
+`lsp-ui-peek-find-references` is a fancier more GUI-fied version of
+`lsp-find-references` which seems to only sometimes work for me (when it does,
+you get a complicated overlay -- it looks like a collection of windows but is
+not -- in which you can preview references and navigate through them; other
+times it seems to jump me, sometimes inaccurately, to the definition).
+`lsp-find-references` itself seems to not find references in other files for me,
+I haven't yet tested to see what the behaviour is in VS code.
+
+In spacemacs `, g g` (`spacemacs/jump-to-definition`) ends up rather indirectly
+using `lsp-ui-peek-find-definitions` (which is also bound directly to `, G d`).
+`, g r` is `xref-find-references`.  `, G r` is `lsp-ui-peek-find-references`
+(when it shows the overlay, `j` and `k` or `n` and `p` navigate the list of
+references, I think `h` and `l` would navigate the file list if I ever saw one,
+and `q` quits).
 
 ## Problems
 
