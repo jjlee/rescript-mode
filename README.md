@@ -187,17 +187,18 @@ may have a stale `.bsb.lock` lock file in your project.
 
 ### Type Information
 
-The configuration above enables `lsp-ui-doc-mode`, because that's the only way I
-know to get useful type information with this LSP server and `lsp-mode.el`.
-There may be other ways I don't know about.
-
-With `lsp-ui-doc-mode`, hovering with the mouse or moving point to some code
-should give a popup like this:
+The configuration above enables `lsp-ui-doc-mode`.  Hovering with the mouse or
+moving point to some code should give a popup like this:
 
 ![Type information](./typeinfo.png)
 
-If you don't like it popping up automatically, you can leave `lsp-ui-doc-mode`
-off and just use `lsp-ui-doc-glance` every time you want to see it.
+Here are some other ways to see type information if you don't like it popping up
+automatically:
+
+* You can leave `lsp-ui-doc-mode` off and just use `lsp-ui-doc-glance` every
+  time you want to see it.
+* You can use `lsp-describe-thing-at-point` to see the type in a window instead
+  of in a popup overlay.
 
 ### Completion
 
