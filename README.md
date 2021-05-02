@@ -282,6 +282,13 @@ Packaging issues:
 * Teach lsp-mode how to install rescript-vscode, or bundle it
 * Add spacemacs layer
 
+## Development
+
+To run the tests, install [Cask](https://github.com/cask/cask) and run this in
+the project root directory:
+
+    cask exec ert-runner
+
 ## Support
 
 Please do not report issues related to editor support with Emacs upstream to the
