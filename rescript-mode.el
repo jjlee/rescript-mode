@@ -9,7 +9,7 @@
 ;; Maintainer: John Lee <jjl@pobox.com>
 ;; Url: https://github.com/jjlee/rescript-mode
 ;; Keywords: languages, rescript
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "26.1"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -162,7 +162,7 @@
   :keymap rescript-mode-map
 
   ;; Indentation
-  (setq-local indent-line-function 'rescript-indent-line)
+  (setq-local indent-line-function #'rescript-indent-line)
   (setq-local comment-start "/* ")
   (setq-local comment-end   " */")
   (setq-local indent-tabs-mode nil)
@@ -181,7 +181,7 @@
   (setq-local font-lock-defaults '(rescript-font-lock-keywords)))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.resi?$" . rescript-mode))
+(add-to-list 'auto-mode-alist '("\\.resi?\\'" . rescript-mode))
 
 (provide 'rescript-mode)
 ;;; rescript-mode.el ends here
