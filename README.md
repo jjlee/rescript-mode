@@ -64,6 +64,10 @@ Add the following to your Emacs configuration code (for example to `~/.emacs`):
   (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
 ```
 
+For now: ensure that `reason-mode` is not installed, e.g. using `package-delete`
+(I guess `reason-mode` needs to change so that `.re` is considered Reason code
+but not `.res`).
+
 Restart Emacs and open a ReScript `.res` file and you should have all the
 features working.
 
@@ -120,6 +124,11 @@ configuration file:
   (require 'lsp-ui)
   (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
 ```
+
+For now: ensure that `reasonml` layer is not listed in
+`dotspacemacs-configuration-layers` and `reason-mode` is not listed in
+`dotspacemacs-additional-packages` (I guess `reason-mode` needs to change so
+that `.re` is considered Reason code but not `.res`).
 
 Restart spacemacs (`SPC q r`) and open a ReScript `.res` file and you should
 have all the features working.
