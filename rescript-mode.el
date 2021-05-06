@@ -48,7 +48,7 @@
 
 (require 'rescript-indent)
 
-(defconst rescript-re-ident "[[:word:][:multibyte:]_][[:word:][:multibyte:]_[:digit:]]*")
+(defconst rescript--re-ident "[[:word:][:multibyte:]_][[:word:][:multibyte:]_[:digit:]]*")
 
 ;; Syntax definitions and helpers
 (defvar rescript-mode-syntax-table
@@ -133,15 +133,15 @@
     (,rescript-camel-case 1 font-lock-type-face)
 
     ;; Field names like `foo:`, highlight excluding the :
-    (,(concat (rescript--re-grab rescript-re-ident) ":[^:]") 1 font-lock-variable-name-face)
+    (,(concat (rescript--re-grab rescript--re-ident) ":[^:]") 1 font-lock-variable-name-face)
     ;; Module names like `foo::`, highlight including the ::
-    (,(rescript--re-grab (concat rescript-re-ident "::")) 1 font-lock-type-face)
+    (,(rescript--re-grab (concat rescript--re-ident "::")) 1 font-lock-type-face)
     ;; Name punned labeled args like ::foo
-    (,(concat "[[:space:]]+" (rescript--re-grab (concat "::" rescript-re-ident))) 1 font-lock-type-face)
+    (,(concat "[[:space:]]+" (rescript--re-grab (concat "::" rescript--re-ident))) 1 font-lock-type-face)
 
     ;; TODO jsx attribs?
     (,
-     (concat "<[/]?" (rescript--re-grab rescript-re-ident) "[^>]*" ">")
+     (concat "<[/]?" (rescript--re-grab rescript--re-ident) "[^>]*" ">")
      1 font-lock-type-face)))
 
 (defvar rescript-mode-map
