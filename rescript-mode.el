@@ -78,7 +78,7 @@
 ;; export
 
 ;; Font-locking definitions and helpers
-(defconst rescript-mode-keywords
+(defconst rescript--keywords
   '("and" "as" "assert"
     "begin"
     "catch" "finally" "raise"
@@ -100,15 +100,15 @@
     "while"))
 
 
-(defconst rescript-mode-consts
+(defconst rescript--consts
   '("true" "false"))
 
-(defconst rescript-special-types
+(defconst rescript--special-types
   '("int" "float" "string" "char"
     "bool" "unit" "list" "array" "exn"
     "option" "ref"))
 
-(defconst rescript-camel-case
+(defconst rescript--camel-case
   (rx symbol-start
       (group upper (0+ (any word nonascii digit "_")))
       symbol-end))
@@ -125,12 +125,12 @@
   (concat "\\(" inner "\\)"))
 
 ;;; Syntax highlighting for Rescript
-(defvar rescript-font-lock-keywords
-  `((,(regexp-opt rescript-mode-keywords 'symbols) . font-lock-keyword-face)
-    (,(regexp-opt rescript-special-types 'symbols) . font-lock-builtin-face)
-    (,(regexp-opt rescript-mode-consts 'symbols) . font-lock-constant-face)
+(defvar rescript--font-lock-keywords
+  `((,(regexp-opt rescript--keywords 'symbols) . font-lock-keyword-face)
+    (,(regexp-opt rescript--special-types 'symbols) . font-lock-builtin-face)
+    (,(regexp-opt rescript--consts 'symbols) . font-lock-constant-face)
 
-    (,rescript-camel-case 1 font-lock-type-face)
+    (,rescript--camel-case 1 font-lock-type-face)
 
     ;; Field names like `foo:`, highlight excluding the :
     (,(concat (rescript--re-grab rescript--re-ident) ":[^:]") 1 font-lock-variable-name-face)
@@ -173,7 +173,7 @@
   (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
   (setq-local comment-end "")
   ;; Fonts
-  (setq-local font-lock-defaults '(rescript-font-lock-keywords)))
+  (setq-local font-lock-defaults '(rescript--font-lock-keywords)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.resi?\\'" . rescript-mode))
