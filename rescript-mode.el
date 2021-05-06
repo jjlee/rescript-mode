@@ -72,11 +72,6 @@
 
     table))
 
-(defcustom rescript-mode-hook nil
-  "Hook called by `rescript-mode'."
-  :type 'hook
-  :group 'rescript)
-
 ;; in rescript-vscode grammar file, what are they?
 ;; import
 ;; library
