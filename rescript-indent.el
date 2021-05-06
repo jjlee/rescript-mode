@@ -311,8 +311,7 @@ If invoked while inside a macro, treat the macro as normal text."
                  (rescript--backward-syntactic-ws)
                  ;; We might misindent some expressions that would
                  ;; return NaN anyway.  Shouldn't be a problem.
-                 (memq (char-before) '(?, ?} ?{)))))
-         )))
+                 (memq (char-before) '(?, ?} ?{))))))))
 
 (defun rescript--find-newline-backward ()
   "Move backward to the nearest newline that is not in a block comment."
