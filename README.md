@@ -134,19 +134,7 @@ Restart spacemacs (`SPC q r`) and open a ReScript `.res` file and you should
 have all the features working.
 
 
-### Formatting
-
-You can use a package like
-[`format-all`](https://github.com/lassik/emacs-format-all-the-code) or
-[`reformatter`](https://github.com/purcell/reformatter.el) to get your code
-formatted correctly (i.e. as `bsc -format`, soon to be renamed `rescript
-format`, formats it -- this is like `gofmt` for ReScript).  See [this
-thread](https://forum.rescript-lang.org/t/rescript-emacs-support-with-rescript-vscode/1056/14)
-(I've not tried either of these).
-
-`lsp-mode` will make this part unnecessary when I get around to submitting a fix
-for an `lsp-mode` bug that currently causes `lsp-format-buffer` not to work with
-rescript-vscode.
+### Formatting and indentation
 
 #### Formatting vs. Indentation
 
@@ -162,6 +150,35 @@ how you have things configured I guess) gives you an approximation of the
 proper formatting, but stops you having to pay attention to formatting when
 writing code.
 
+#### Formatting
+
+You can use a package like
+[`format-all`](https://github.com/lassik/emacs-format-all-the-code) or
+[`reformatter`](https://github.com/purcell/reformatter.el) to get your code
+formatted correctly (i.e. as `bsc -format`, soon to be renamed `rescript
+format`, formats it -- this is like `gofmt` for ReScript).  See [this
+thread](https://forum.rescript-lang.org/t/rescript-emacs-support-with-rescript-vscode/1056/14)
+(I've not tried either of these).
+
+`lsp-mode` will make this part unnecessary when I get around to submitting a fix
+for an `lsp-mode` bug that currently causes `lsp-format-buffer` not to work with
+rescript-vscode.
+
+### Indentation
+
+This is a terrible hack: it's lifted straight from `js-mode` (`js.el`) with
+little effort to adapt it to ReScript, and without any JSX support.
+Nevertheless, aside from JSX it seems to work OK.
+
+For more predictability, you may prefer to use something like `indent-relative`
+or `indent-relative-first-indent-point`, by adding something like this in your
+`(with-eval-after-load 'rescript mode ...`:
+
+```elisp
+(define my/rescript-mode-hook ()
+  (setq-local indent-line-function #'indent-relative))
+(add-hook 'rescript-mode-hook #'my/rescript-mode-hook)
+```
 
 ## Features
 
@@ -268,17 +285,16 @@ I've barely used this yet, so probably a lot of things are very broken!
 
 See the github issues, but notably:
 
-* Indentation (note below re formatting vs indentation) is a terrible hack: it's
-  lifted straight from `js-mode` (`js.el`) with little effort to adapt it to
-  ReScript, and without any JSX support.  Nevertheless, aside from JSX it seems
-  to work OK.  This doesn't look like a small task to fix, though quite possibly
-  just starting with `js.el` and adding the small amount of code in
-  rescript-mode.el would result in something useable -- but then the likelihood
-  of my fixing any bugs at all would probably drop to zero!  It's also possible
-  that a smaller subset of the JSX support can be extracted -- it's not obvious
-  to me that that's easy though.  So I'm inclined to lean heavily on `bsc
-  -format` code formatting and not worry about JSX indentation until the day our
-  Emacs ReScript hero comes.
+
+ Emacs support
+* [Indentation](#indentation) is bad (especially JSX).  This doesn't look like a
+small task to fix, though quite possibly just starting with `js.el` and adding
+the small amount of code in rescript-mode.el would result in something useable
+-- but then the likelihood of my fixing any bugs at all would probably drop to
+zero!  It's also possible that a smaller subset of the JSX support can be
+extracted -- it's not obvious to me that that's easy though.  So I'm inclined to
+lean heavily on `bsc -format` code formatting and not worry about JSX
+indentation until the day our Emacs ReScript hero comes.
 * Font lock and indentation are broken for things like `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
   handle the response from rescript-vscode because it uses a range like
