@@ -17,6 +17,8 @@ Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/la
 
 TODO: bundle this or provide a way of auto-installing it
 
+You can either build this from source or download a release:
+
 * To build from source, fetch [the rescript
 repo](https://github.com/rescript-lang/rescript-vscode) and compile it following
 [the build documentation
