@@ -314,6 +314,13 @@ and `q` quits).
 
 ## Problems
 
+If you don't see type information and errors: the ReScript compiler should be
+running, and in order to run it, you need the JavaScript dependencies of the
+project you're editing.  Often those are fetched by running `npm install`.  When
+you've done that, you can `revert-buffer` (or `SPC b R` in spacemacs) to reload
+the `.res` file you're looking at, which should prompt you to ask if you'd like
+to start a build (i.e. run the ReScript compiler).
+
 If you run into problems with display of compilation errors
 (`flycheck`/`flymake` errors), try this to get rid of any stale ReScript build:
 
