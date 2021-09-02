@@ -142,11 +142,11 @@ In case the distinction is unclear:
 
 Formatting: This means that you run an Emacs command, and your whole buffer (or
 some section of it that you specify maybe) is magically formatted correctly --
-that is, in the way that `bsc -format` formats it.
+that is, in the way that `rescript format` formats it.
 
 Indentation: This means that hitting the tab key or the return key (depending
 how you have things configured I guess) gives you an approximation of the
-“official” formatting of a tool like `bsc -format`. It’s never identical to
+“official” formatting of a tool like `rescript format`. It’s never identical to
 proper formatting, but stops you having to pay attention to formatting when
 writing code.
 
@@ -155,7 +155,7 @@ writing code.
 You can use a package like
 [`format-all`](https://github.com/lassik/emacs-format-all-the-code) or
 [`reformatter`](https://github.com/purcell/reformatter.el) to get your code
-formatted correctly (i.e. as `bsc -format`, soon to be renamed `rescript
+formatted correctly (i.e. as `rescript format`, soon to be renamed `rescript
 format`, formats it -- this is like `gofmt` for ReScript).  See [this
 thread](https://forum.rescript-lang.org/t/rescript-emacs-support-with-rescript-vscode/1056/14)
 (I've not tried either of these).
@@ -193,7 +193,7 @@ You should see any errors show up via flycheck -- for me they look like this:
 
 These errors only show up when you save.
 
-If you don't see that, `bsb` may not be running on your project.
+If you don't see that, `rescript build *` may not be running on your project.
 
 To provide these UI for these errors, LSP mode falls back to `flymake` if
 `flycheck` is not installed, so it's recommended to install the latter.
@@ -201,7 +201,7 @@ To provide these UI for these errors, LSP mode falls back to `flymake` if
 When you open a `.res` file in your project, you should see a prompt in Emacs in
 the minibuffer `"Start a build for this project to get the freshest data?"`.
 You can either hit return on `Start Build` to say yes to that and the LSP server
-will start a build for you, or `C-g` out of that and run `bsb` yourself however
+will start a build for you, or `C-g` out of that and run `rescript build *` yourself however
 you usually do that in your rescript project (in my project I run `npm start`).
 
 You may find the UI here (how the `Start Build` option is presented) is a bit
@@ -267,7 +267,7 @@ and `q` quits).
 If you run into problems with display of compilation errors
 (`flycheck`/`flymake` errors), try this to get rid of any stale ReScript build:
 
-* Kill any `bsb` processes
+* Kill any `rescript` or `bsb` processes
 * Remove any .bsb.lock file in your project
 * `M-x revert-buffer` on the .res file you're trying to edit
 
@@ -293,7 +293,7 @@ the small amount of code in rescript-mode.el would result in something useable
 -- but then the likelihood of my fixing any bugs at all would probably drop to
 zero!  It's also possible that a smaller subset of the JSX support can be
 extracted -- it's not obvious to me that that's easy though.  So I'm inclined to
-lean heavily on `bsc -format` code formatting and not worry about JSX
+lean heavily on `rescript format` code formatting and not worry about JSX
 indentation until the day our Emacs ReScript hero comes.
 * Font lock and indentation are broken for things like `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
