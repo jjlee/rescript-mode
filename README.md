@@ -13,8 +13,6 @@ Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/la
 * [rescript-vscode](https://github.com/rescript-lang/rescript-vscode) to provide the ReScript LSP server for type information, compiler errors, completion, and jump to definition/find references
 * Currently, [a way to format ReScript code](#formatting) (LSP also provides this, but there is an lsp-mode bug I need to report/fix before this works)
 
-The instructions here assume that you're using [LSP mode](https://emacs-lsp.github.io/lsp-mode/).  [eglot](https://github.com/joaotavora/eglot) may work too, I haven't tried it.
-
 ### rescript-vscode
 
 TODO: bundle this or provide a way of auto-installing it
@@ -37,8 +35,9 @@ production build location.
 
 ### Vanilla Emacs
 
-`rescript-mode` itself does not depend on `lsp-mode`.  `lsp-rescript` provides
-configuration code for `lsp-mode` and depends on `rescript-mode`.
+#### [LSP mode](https://emacs-lsp.github.io/lsp-mode/)
+
+`lsp-rescript` provides configuration code for `lsp-mode` and depends on `rescript-mode`.
 
 Install the following packages (e.g. using `M-x package-install` -- you can use
 things like use-package if you like of course):
@@ -76,8 +75,29 @@ project to get the freshest data?"` on opening a ReScript file in a rather
 unfriendly way: you have to hit `TAB` to see the single possible `Start a Build`
 response, then hit return.
 
+#### [eglot](https://github.com/joaotavora/eglot)
+
+Install the following packages (e.g. using `M-x package-install`:
+
+* rescript-mode
+* eglot
+
+This configuration uses `use-package`, which you also need to install, but it
+shouldn't be too hard to rewrite this to not use `use-package`.
+
+```elisp
+(use-package rescript-mode
+  :hook ((rescript-mode . (lambda () (electric-indent-local-mode -1))))
+  :config
+  (add-to-list 'eglot-server-programs
+         '(rescript-mode . ("node"
+          "/path/to/rescript-vscode/server/out/server.js"
+          "--stdio"))))
+```
 
 ### Spacemacs
+
+#### [LSP mode](https://emacs-lsp.github.io/lsp-mode/)
 
 TODO: make a configuration layer
 
