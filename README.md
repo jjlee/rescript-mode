@@ -95,6 +95,36 @@ shouldn't be too hard to rewrite this to not use `use-package`.
           "--stdio"))))
 ```
 
+### Doom Emacs
+
+#### [eglot](https://github.com/joaotavora/eglot)
+
+In `init.el`, ensure you have the `+eglot` option for `lsp`:
+
+```elisp
+(lsp +eglot)
+```
+
+In `packages.el` add:
+
+```elisp
+(package! rescript-mode)
+```
+
+Then in `config.el` add:
+
+```elisp
+(after! eglot
+  (add-to-list 'eglot-server-programs
+               '(rescript-mode . ("node"
+                                  "/path/to/rescript-vscode/server/out/server.js"
+                                  "--stdio")))
+  )
+
+(add-hook 'rescript-mode-hook (lambda () (eglot-ensure)))
+```
+
+
 ### Spacemacs
 
 #### [LSP mode](https://emacs-lsp.github.io/lsp-mode/)
