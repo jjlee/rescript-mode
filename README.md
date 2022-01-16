@@ -99,7 +99,7 @@ shouldn't be too hard to rewrite this to not use `use-package`.
 
 #### [eglot](https://github.com/joaotavora/eglot)
 
-In `init`el`, ensure you have the `+eglot` option for `lsp`:
+In `init.el`, ensure you have the `+eglot` option for `lsp`:
 
 ```elisp
 (lsp +eglot)
@@ -117,14 +117,11 @@ Then in `config.el` add:
 (after! eglot
   (add-to-list 'eglot-server-programs
                '(rescript-mode . ("node"
-                                  "/path/to/rescript-vscode/server/out/server.jss"
+                                  "/path/to/rescript-vscode/server/out/server.js"
                                   "--stdio")))
   )
 
-(add-hook 'rescript-mode-hook (lambda ()
-                                (eglot-ensure)
-                                (electric-indent-local-mode -1)
-                                ))
+(add-hook 'rescript-mode-hook (lambda () (eglot-ensure)))
 ```
 
 
