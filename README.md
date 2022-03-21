@@ -97,6 +97,32 @@ shouldn't be too hard to rewrite this to not use `use-package`.
 
 ### Doom Emacs
 
+#### Default LSP
+
+Ensure `lsp` is enabled in `init.el`.
+
+In `packages.el` add:
+
+```elisp
+(package! rescript-mode)
+```
+
+Then in `config.el` add:
+
+```elisp
+(after! lsp-mode
+  (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
+  (lsp-register-client
+      (make-lsp-client
+        :new-connection (lsp-stdio-connection '("node"
+                                                "/path/to/rescript-vscode/server/out/server.js"
+                                                "--stdio"))
+        :major-modes '(rescript-mode)
+        :server-id 'rescript)))
+
+(add-hook 'rescript-mode-hook (lambda () (lsp)))
+```
+
 #### [eglot](https://github.com/joaotavora/eglot)
 
 In `init.el`, ensure you have the `+eglot` option for `lsp`:
