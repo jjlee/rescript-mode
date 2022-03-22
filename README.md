@@ -346,14 +346,12 @@ See the github issues, but notably:
 
 
  Emacs support
-* [Indentation](#indentation) is bad (especially JSX).  This doesn't look like a
-small task to fix, though quite possibly just starting with `js.el` and adding
-the small amount of code in rescript-mode.el would result in something useable
--- but then the likelihood of my fixing any bugs at all would probably drop to
-zero!  It's also possible that a smaller subset of the JSX support can be
-extracted -- it's not obvious to me that that's easy though.  So I'm inclined to
-lean heavily on `rescript format` code formatting and not worry about JSX
-indentation until the day our Emacs ReScript hero comes.
+* [Indentation](#indentation) is a terrible hack and should very likely be
+  replaced with
+  [tree-sitter-rescript](https://github.com/nkrkv/tree-sitter-rescript/) and
+  [elisp-tree-sitter](https://github.com/emacs-tree-sitter/elisp-tree-sitter)
+  and [tree-sitter-indent](https://github.com/emacsmirror/tree-sitter-indent) --
+  probably very easy?  Perhaps this will also improve font-lock etc!
 * Font lock and indentation are broken for things like `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
   handle the response from rescript-vscode because it uses a range like
