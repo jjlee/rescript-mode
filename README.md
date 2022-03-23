@@ -105,22 +105,22 @@ In `packages.el` add:
 
 ```elisp
 (package! rescript-mode)
+(package! lsp-rescript)
 ```
 
 Then in `config.el` add:
 
 ```elisp
-(after! lsp-mode
-  (add-to-list 'lsp-language-id-configuration '(rescript-mode . "rescript"))
-  (lsp-register-client
-      (make-lsp-client
-        :new-connection (lsp-stdio-connection '("node"
-                                                "/path/to/rescript-vscode/server/out/server.js"
-                                                "--stdio"))
-        :major-modes '(rescript-mode)
-        :server-id 'rescript)))
-
-(add-hook 'rescript-mode-hook (lambda () (lsp)))
+(after! rescript-mode
+  (setq lsp-rescript-server-command
+        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+  ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+  (require 'lsp-rescript)
+  ;; Enable `lsp-mode` in rescript-mode buffers
+  (add-hook 'rescript-mode-hook 'lsp-deferred)
+  ;; Enable display of type information in rescript-mode buffers
+  (require 'lsp-ui)
+  (add-hook 'rescript-mode-hook 'lsp-ui-doc-mode))
 ```
 
 #### [eglot](https://github.com/joaotavora/eglot)
