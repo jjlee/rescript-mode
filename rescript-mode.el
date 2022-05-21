@@ -80,24 +80,18 @@
 ;; Font-locking definitions and helpers
 (defconst rescript--keywords
   '("and" "as" "assert"
-    "begin"
-    "catch" "finally" "raise"
-    "class" "constraint"
-    "do" "done" "downto"
-    "else"
-    "exception" "external"
-    "for" "fun" "functor"
-    "if" "in" "include" "inherit"
-    "lazy" "let"
+    "constraint"
+    "else" "exception" "export" "external"
+    "false" "for"
+    "if" "import" "in" "include"
+    "lazy" "let" "list{"
     "module" "mutable"
-    "new" "nonrec"
-    "object" "of" "open" "or"
-    "pri" "private" "pub"
+    "of" "open"
+    "private"
     "rec"
     "switch"
-    "then" "to" "try" "type"
-    "val" "virtual"
-    "while"))
+    "true" "try" "type"
+    "when" "while"))
 
 
 (defconst rescript--consts
