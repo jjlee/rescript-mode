@@ -79,7 +79,7 @@
 
 ;; Font-locking definitions and helpers
 (defconst rescript--keywords
-  '("and" "as" "assert"
+  '("and" "as" "assert" "async" "await"
     "constraint"
     "else" "exception" "export" "external"
     "false" "for"
