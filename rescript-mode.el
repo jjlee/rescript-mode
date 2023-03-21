@@ -179,12 +179,12 @@
          (* (or space control))
          line-start
          (* space)
-         (group (seq (* any) ".res"))
-         ":"
-         (group (+ digit))
-         ":"
-         (group (+ digit))
-         (? "-" (+ digit) (? ":" (+ digit)))
+         (group (group (seq (* any) ".res"))
+           ":"
+           (group (+ digit))
+           ":"
+           (group (+ digit))
+           (? "-" (+ digit) (? ":" (+ digit))))
          line-end)))
 
 
@@ -197,12 +197,12 @@
        (* (or space control))
        line-start
        (* space)
-       (group (seq (* any) ".res"))
-       ":"
-       (group (+ digit))
-       ":"
-       (group (+ digit))
-       (? "-" (+ digit))
+       (group (group (seq (* any) ".res"))
+         ":"
+         (group (+ digit))
+         ":"
+         (group (+ digit))
+         (? "-" (+ digit)))
        line-end))))
 
 
@@ -211,11 +211,11 @@
 
 (add-to-list
   'compilation-error-regexp-alist-alist
-  (cons 'rescript-error (cons rescript--compilation-error-rx '(1 2 3 2 1))))
+  (cons 'rescript-error (cons rescript--compilation-error-rx '(2 3 4 2 1))))
 
 (add-to-list
   'compilation-error-regexp-alist-alist
-  (cons 'rescript-warning (cons rescript--compilation-warning-rx '(1 2 3 1 1))))
+  (cons 'rescript-warning (cons rescript--compilation-warning-rx '(2 3 4 1 1))))
 
 
 
