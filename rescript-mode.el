@@ -175,7 +175,7 @@
   (defconst rescript--compilation-error-rx
     (rx-to-string
       '(seq
-         "We've found a bug for you!"
+         (or "We've found a bug for you!" "Syntax error!")
          (* (or space control))
          line-start
          (* space)
@@ -184,7 +184,7 @@
          (group (+ digit))
          ":"
          (group (+ digit))
-         (? "-" (group (+ digit)))
+         (? "-" (+ digit) (? ":" (+ digit)))
          line-end)))
 
 
