@@ -169,6 +169,56 @@
   ;; Fonts
   (setq-local font-lock-defaults '(rescript--font-lock-keywords)))
 
+
+;;; Compilation Error Regexs
+(eval-and-compile
+  (defconst rescript--compilation-error-rx
+    (rx-to-string
+      '(seq
+         "We've found a bug for you!"
+         (* (or space control))
+         line-start
+         (* space)
+         (group (seq (* any) ".res"))
+         ":"
+         (group (+ digit))
+         ":"
+         (group (+ digit))
+         (? "-" (group (+ digit)))
+         line-end)))
+
+
+  (defconst rescript--compilation-warning-rx
+    (rx-to-string
+    '(seq
+       "Warning number"
+       (+ space)
+       (+ digit)
+       (* (or space control))
+       line-start
+       (* space)
+       (group (seq (* any) ".res"))
+       ":"
+       (group (+ digit))
+       ":"
+       (group (+ digit))
+       (? "-" (group (+ digit)))
+       line-end))))
+
+
+(add-to-list 'compilation-error-regexp-alist 'rescript-error)
+(add-to-list 'compilation-error-regexp-alist 'rescript-warning)
+
+(add-to-list
+  'compilation-error-regexp-alist-alist
+  (cons 'rescript-error (cons rescript--compilation-error-rx '(1 2 3 2 1))))
+
+(add-to-list
+  'compilation-error-regexp-alist-alist
+  (cons 'rescript-warning (cons rescript--compilation-warning-rx '(1 2 3 1 1))))
+
+
+
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.resi?\\'" . rescript-mode))
 
