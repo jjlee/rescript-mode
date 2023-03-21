@@ -175,7 +175,15 @@
   (defconst rescript--compilation-error-rx
     (rx-to-string
       '(seq
-         (or "We've found a bug for you!" "Syntax error!")
+         (or
+           "We've found a bug for you!"
+           "Syntax error!"
+           (seq
+             "Warning number"
+             (* space)
+             (+ digit)
+             (* space)
+             "(configured as error)"))
          (* (or space control))
          line-start
          (* space)
