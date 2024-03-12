@@ -187,7 +187,7 @@
          (* (or space control))
          line-start
          (* space)
-         (group (group (seq (* any) ".res"))
+         (group (group (seq (* any) (or ".res" ".resi")))
            ":"
            (group (+ digit))
            ":"
@@ -205,7 +205,7 @@
        (* (or space control))
        line-start
        (* space)
-       (group (group (seq (* any) ".res"))
+       (group (group (seq (* any) (or ".res" ".resi")))
          ":"
          (group (+ digit))
          ":"
