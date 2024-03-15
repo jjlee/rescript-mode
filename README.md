@@ -10,30 +10,18 @@ team](https://rescript-lang.org/docs/manual/latest/editor-plugins).
 Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/latest/installation) and this code, for a full setup you need:
 
 * Strongly recommended: Emacs 27.0 or newer built with native JSON support, for LSP performance
-* [rescript-vscode](https://github.com/rescript-lang/rescript-vscode) to provide the ReScript LSP server for type information, compiler errors, completion, and jump to definition/find references
+* The [ReScript language server](https://github.com/rescript-lang/rescript-vscode/tree/master/server), for type information, compiler errors, completion, and jump to definition/find references
 * Currently, [a way to format ReScript code](#formatting) (LSP also provides this, but there is an lsp-mode bug I need to report/fix before this works)
 
-### rescript-vscode
+### ReScript language server
 
 TODO: bundle this or provide a way of auto-installing it
 
-You can either build this from source or download a release:
+Install the language server globally with:
 
-* To build from source, fetch [the rescript
-repo](https://github.com/rescript-lang/rescript-vscode) and compile it following
-[the build documentation
-there](https://github.com/rescript-lang/rescript-vscode/blob/master/CONTRIBUTING.md#install-dependencies).
-The language server should then be present as `server/out/server.js` (and in
-newer rescript-vscode versions, also the analysis native binary
-`analysis/rescript-editor-analysis.exe`).
-
-* Alternatively, you can download and unzip a release `.vsix` from
-[here](https://github.com/rescript-lang/rescript-vscode/releases) to use a
-prebuilt server.  Again note that though it's just the `server.js` whose path
-you should use in `'lsp-rescript-server-command`, in recent releases you do need
-to keep the whole `server` directory intact so that you also have
-`rescript-editor-analysis.exe` at a path relative to `server.js` in its correct
-production build location.
+```sh
+npm i -g @rescript/language-server
+```
 
 ### Vanilla Emacs
 
@@ -50,13 +38,12 @@ things like use-package if you like of course):
 Add the following to your Emacs configuration code (for example to `~/.emacs`):
 
 ```elisp
-;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
-;; (you'll have to adjust the path here to match your local system):
+;; Tell `rescript-mode` how to run the language server
 (customize-set-variable
   'lsp-rescript-server-command
-    '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+    '("rescript-language-server" "--stdio"))
 (with-eval-after-load 'rescript-mode
-  ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+  ;; Tell `lsp-mode` about the language server
   (require 'lsp-rescript)
   ;; Enable `lsp-mode` in rescript-mode buffers
   (add-hook 'rescript-mode-hook 'lsp-deferred)
@@ -92,9 +79,7 @@ shouldn't be too hard to rewrite this to not use `use-package`.
   :hook ((rescript-mode . (lambda () (electric-indent-local-mode -1))))
   :config
   (add-to-list 'eglot-server-programs
-         '(rescript-mode . ("node"
-          "/path/to/rescript-vscode/server/out/server.js"
-          "--stdio"))))
+         '(rescript-mode . ("rescript-language-server" "--stdio"))))
 ```
 
 ### Doom Emacs
@@ -115,7 +100,7 @@ Then in `config.el` add:
 ```elisp
 (after! rescript-mode
   (setq lsp-rescript-server-command
-        '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio"))
+        '("rescript-language-server" "--stdio"))
   ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
   (require 'lsp-rescript)
   ;; Enable `lsp-mode` in rescript-mode buffers
@@ -144,9 +129,7 @@ Then in `config.el` add:
 ```elisp
 (after! eglot
   (add-to-list 'eglot-server-programs
-               '(rescript-mode . ("node"
-                                  "/path/to/rescript-vscode/server/out/server.js"
-                                  "--stdio")))
+               '(rescript-mode . ("rescropt-language-server" "--stdio")))
   )
 
 (add-hook 'rescript-mode-hook (lambda () (eglot-ensure)))
@@ -186,13 +169,12 @@ Add this to the `dotspacemacs/user-config` section of your spacemacs
 configuration file:
 
 ```elisp
-;; Tell `rescript-mode` how to run your copy of `server.js` from rescript-vscode
-;; (you'll have to adjust the path here to match your local system):
-(custom-set-variables
-  '(lsp-rescript-server-command
-    '("node" "/path/to/rescript-vscode/server/out/server.js" "--stdio")))
+;; Tell `rescript-mode` how to run the language server
+(customize-set-variable
+  'lsp-rescript-server-command
+    '("rescript-language-server" "--stdio"))
 (with-eval-after-load 'rescript-mode
-  ;; Tell `lsp-mode` about the `rescript-vscode` LSP server
+  ;; Tell `lsp-mode` about the lamguage server
   (require 'lsp-rescript)
   ;; All I remember is something weird happened if this wasn't there :-)
   (spacemacs|define-jump-handlers rescript-mode)
@@ -356,11 +338,7 @@ If you run into problems with display of compilation errors
 * Remove any .bsb.lock file in your project
 * `M-x revert-buffer` on the .res file you're trying to edit
 
-If you run into problems with other things, you can try killing the LSP server,
-which will look something like this:
-
-```/path/to/rescript-vscode/bin/node /path/to/rescript-vscode/server/out/server.js --stdio```
-
+If you run into problems with other things, you can try killing the language server, 
 and then if LSP doesn't automatically prompt you to restart the server, `M-x lsp`.
 
 
