@@ -129,7 +129,7 @@ Then in `config.el` add:
 ```elisp
 (after! eglot
   (add-to-list 'eglot-server-programs
-               '(rescript-mode . ("rescropt-language-server" "--stdio")))
+               '(rescript-mode . ("rescript-language-server" "--stdio")))
   )
 
 (add-hook 'rescript-mode-hook (lambda () (eglot-ensure)))
