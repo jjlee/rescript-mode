@@ -210,7 +210,7 @@
          (group (+ digit))
          ":"
          (group (+ digit))
-         (? "-" (+ digit)))
+         (? "-" (+ digit) (? ":" (+ digit))))
        line-end))))
 
 
