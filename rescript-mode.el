@@ -206,6 +206,7 @@ break string parsing."
 
 
 ;;; Compilation Error Regexs
+;;;###autoload
 (eval-and-compile
   (defconst rescript--compilation-error-rx
     (rx-to-string
@@ -249,16 +250,18 @@ break string parsing."
        line-end))))
 
 
-(add-to-list 'compilation-error-regexp-alist 'rescript-error)
-(add-to-list 'compilation-error-regexp-alist 'rescript-warning)
+;;;###autoload
+(with-eval-after-load 'compile
+  (add-to-list 'compilation-error-regexp-alist 'rescript-error)
+  (add-to-list 'compilation-error-regexp-alist 'rescript-warning)
 
-(add-to-list
-  'compilation-error-regexp-alist-alist
-  (cons 'rescript-error (cons rescript--compilation-error-rx '(2 3 4 2 1))))
+  (add-to-list
+    'compilation-error-regexp-alist-alist
+    (cons 'rescript-error (cons rescript--compilation-error-rx '(2 3 4 2 1))))
 
-(add-to-list
-  'compilation-error-regexp-alist-alist
-  (cons 'rescript-warning (cons rescript--compilation-warning-rx '(2 3 4 1 1))))
+  (add-to-list
+    'compilation-error-regexp-alist-alist
+    (cons 'rescript-warning (cons rescript--compilation-warning-rx '(2 3 4 1 1)))))
 
 
 
