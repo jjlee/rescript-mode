@@ -1,0 +1,219 @@
+;;; rescript-ts-mode.el --- Tree-sitter based major mode for ReScript -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2024-2026 Manuel Vázquez Acosta
+
+;; Author: Manuel Vázquez Acosta
+;; Keywords: languages, rescript
+;; Package-Requires: ((emacs "29.1"))
+
+;; This file is NOT part of GNU Emacs.
+
+;;; Commentary:
+;; A tree-sitter based major mode for ReScript.  Uses the rescript
+;; tree-sitter grammar maintained by the ReScript team, which correctly
+;; handles regex literals, template strings, and other syntax that is
+;; problematic for regexp-based font-locking.
+
+;;; Code:
+
+(require 'treesit)
+(require 'prog-mode)
+
+(defgroup rescript-ts nil
+  "Major mode for editing ReScript with tree-sitter."
+  :prefix "rescript-ts-"
+  :group 'languages)
+
+(defcustom rescript-ts-indent-offset 2
+  "Number of spaces for each indentation step in `rescript-ts-mode'."
+  :type 'integer
+  :safe 'integerp
+  :group 'rescript-ts)
+
+(defvar rescript-ts--indent-rules
+  `((rescript
+     ((parent-is "source_file") column-0 0)
+     ((node-is "}") parent-bol 0)
+     ((node-is ")") parent-bol 0)
+     ((node-is "]") parent-bol 0)
+     ((node-is ">") parent-bol 0)
+     ((parent-is "block") parent-bol rescript-ts-indent-offset)
+     ((parent-is "arguments") parent-bol rescript-ts-indent-offset)
+     ((parent-is "formal_parameters") parent-bol rescript-ts-indent-offset)
+     ((parent-is "switch_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "switch_match") parent-bol rescript-ts-indent-offset)
+     ((parent-is "sequence_expression") parent-bol 0)
+     ((parent-is "record") parent-bol rescript-ts-indent-offset)
+     ((parent-is "record_type") parent-bol rescript-ts-indent-offset)
+     ((parent-is "array") parent-bol rescript-ts-indent-offset)
+     ((parent-is "list") parent-bol rescript-ts-indent-offset)
+     ((parent-is "tuple") parent-bol rescript-ts-indent-offset)
+     ((parent-is "parenthesized_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "module_binding") parent-bol rescript-ts-indent-offset)
+     ((parent-is "variant_declaration") parent-bol rescript-ts-indent-offset)
+     ((parent-is "if_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "else_clause") parent-bol rescript-ts-indent-offset)
+     ((parent-is "try_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "pipe_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "ternary_expression") parent-bol rescript-ts-indent-offset)
+     ((parent-is "jsx_element") parent-bol rescript-ts-indent-offset)
+     ((parent-is "jsx_self_closing_element") parent-bol rescript-ts-indent-offset)
+     ((parent-is "jsx_opening_element") parent-bol rescript-ts-indent-offset)
+     ;; Fallback
+     (no-node parent-bol 0)))
+  "Tree-sitter indentation rules for ReScript.")
+
+(defvar rescript-ts--font-lock-settings
+  (treesit-font-lock-rules
+   ;; Comments
+   :feature 'comment
+   :language 'rescript
+   '((comment) @font-lock-comment-face)
+
+   ;; Strings
+   :feature 'string
+   :language 'rescript
+   '((string) @font-lock-string-face
+     (template_string) @font-lock-string-face
+     (character) @font-lock-string-face)
+
+   ;; Extension expressions like %re("/regex/") -- the extension_identifier
+   ;; gets keyword face, and the string inside keeps its string face from above.
+   :feature 'extension
+   :language 'rescript
+   '((extension_expression
+      (extension_identifier) @font-lock-preprocessor-face))
+
+   ;; Numbers
+   :feature 'number
+   :language 'rescript
+   '((number) @font-lock-number-face)
+
+   ;; Keywords
+   :feature 'keyword
+   :language 'rescript
+   '(["let" "type" "module" "open" "include" "external"
+      "if" "else" "switch" "when"
+      "for" "in" "to" "downto" "while"
+      "try" "catch" "as" "exception"
+      "export"
+      "private" "mutable" "rec" "and"
+      "async" "await" "lazy" "assert"
+      "constraint" "of" "unpack"
+      ] @font-lock-keyword-face)
+
+   ;; Constants
+   :feature 'constant
+   :language 'rescript
+   '((true) @font-lock-constant-face
+     (false) @font-lock-constant-face
+     (unit) @font-lock-constant-face
+     (polyvar) @font-lock-constant-face)
+
+   ;; Types
+   :feature 'type
+   :language 'rescript
+   '((type_identifier) @font-lock-type-face
+     (module_identifier) @font-lock-type-face)
+
+   ;; Functions
+   :feature 'function
+   :language 'rescript
+   '((let_binding pattern: (value_identifier) @font-lock-function-name-face
+                  body: (function))
+     (call_expression
+      function: (value_identifier) @font-lock-function-call-face)
+     (call_expression
+      function: (value_identifier_path
+                 (value_identifier) @font-lock-function-call-face)))
+
+   ;; Variant constructors
+   :feature 'constructor
+   :language 'rescript
+   '((variant_identifier) @font-lock-type-face)
+
+   ;; Decorators like @module, @scope, @send, etc.
+   :feature 'decorator
+   :language 'rescript
+   '((decorator (decorator_identifier) @font-lock-preprocessor-face))
+
+   ;; Property/field names
+   :feature 'property
+   :language 'rescript
+   :override t
+   '((record_type_field (property_identifier) @font-lock-variable-name-face)
+     (record_field (property_identifier) @font-lock-variable-name-face))
+
+   ;; Operators
+   :feature 'operator
+   :language 'rescript
+   '((pipe_expression "->" @font-lock-operator-face))
+
+   ;; Escape sequences in strings
+   :feature 'escape-sequence
+   :language 'rescript
+   :override t
+   '((escape_sequence) @font-lock-escape-face))
+  "Tree-sitter font-lock settings for ReScript.")
+
+(defvar rescript-ts--font-lock-feature-list
+  '((comment string)
+    (keyword type constant number)
+    (function constructor decorator extension property)
+    (operator escape-sequence))
+  "Feature list for font-locking in `rescript-ts-mode'.
+Each level adds more highlighting on top of the previous.")
+
+;;;###autoload
+(define-derived-mode rescript-ts-mode prog-mode "ReScript"
+  "Major mode for editing ReScript, powered by tree-sitter.
+
+\\{rescript-ts-mode-map}"
+  :group 'rescript-ts
+  :syntax-table (let ((table (make-syntax-table)))
+                  (modify-syntax-entry ?/ ". 124b" table)
+                  (modify-syntax-entry ?* ". 23n" table)
+                  (modify-syntax-entry ?\n "> b" table)
+                  table)
+  (unless (treesit-ready-p 'rescript)
+    (error "Tree-sitter grammar for ReScript is not available"))
+
+  (treesit-parser-create 'rescript)
+
+  ;; Font-lock
+  (setq-local treesit-font-lock-settings rescript-ts--font-lock-settings)
+  (setq-local treesit-font-lock-feature-list rescript-ts--font-lock-feature-list)
+
+  ;; Indentation
+  (setq-local treesit-simple-indent-rules rescript-ts--indent-rules)
+  (setq-local indent-tabs-mode nil)
+
+  ;; Comments
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
+  (setq-local comment-end "")
+  (setq-local comment-multi-line t)
+
+  ;; Navigation
+  (setq-local treesit-defun-type-regexp
+              (rx (or "let_declaration"
+                      "type_declaration"
+                      "module_declaration"
+                      "external_declaration"
+                      "exception_declaration")))
+
+  (setq-local require-final-newline t)
+
+  (treesit-major-mode-setup))
+
+;; NOTE: Not auto-enabled yet because the tree-sitter grammar does not
+;; support `dict' syntax (ReScript v11.1+), causing cascading parse
+;; errors.  Enable manually with M-x rescript-ts-mode, or uncomment
+;; the form below once the grammar is updated.
+;;
+;; ;;;###autoload
+;; (if (treesit-ready-p 'rescript t)
+;;     (add-to-list 'auto-mode-alist '("\\.resi?\\'" . rescript-ts-mode)))
+
+(provide 'rescript-ts-mode)
+;;; rescript-ts-mode.el ends here
