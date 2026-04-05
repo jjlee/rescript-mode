@@ -51,6 +51,38 @@
 (defconst rescript--re-ident "[[:word:][:multibyte:]_][[:word:][:multibyte:]_[:digit:]]*")
 
 ;; Syntax definitions and helpers
+
+(defconst rescript--regex-literal-rx
+  (rx (or line-start "=" "(" "," "[" "!" "&" "|" "?" "{" "}" ";" "~" "+"
+          "return" "case" "throw" "in" "delete" "typeof" "void"
+          ">" ":" "^" "%")
+      (* (syntax whitespace))
+      (group "/")
+      ;; Not a comment or empty regex
+      (not (any ?/ ?* ?\n))
+      ;; Regex body: non-/ chars or escaped chars
+      (* (or (seq "\\" not-newline) (not (any ?/ ?\n))))
+      (group "/"))
+  "Regexp matching ReScript regex literals.
+Captures the opening and closing `/` delimiters in groups 1 and 2.")
+
+(defun rescript--syntax-propertize (start end)
+  "Apply syntax properties to regex literals between START and END.
+Marks the `/` delimiters of regex literals with string-fence
+syntax class so that characters like `\"' inside the regex do not
+break string parsing."
+  (goto-char start)
+  (while (re-search-forward rescript--regex-literal-rx end t)
+    ;; Only apply if we're not inside a string or comment
+    (let ((state (save-excursion
+                   (save-match-data
+                     (syntax-ppss (match-beginning 1))))))
+      (unless (or (nth 3 state) (nth 4 state))
+        (put-text-property (match-beginning 1) (match-end 1)
+                           'syntax-table '(15 . ?/))
+        (put-text-property (match-beginning 2) (match-end 2)
+                           'syntax-table '(15 . ?/))))))
+
 (defvar rescript-mode-syntax-table
   (let ((table (make-syntax-table)))
 
@@ -167,10 +199,14 @@
   (setq-local comment-start-skip "\\(//+\\|/\\*+\\)\\s *")
   (setq-local comment-end "")
   ;; Fonts
-  (setq-local font-lock-defaults '(rescript--font-lock-keywords)))
+  (setq-local font-lock-defaults '(rescript--font-lock-keywords))
+  ;; Regex literals: mark / delimiters as string fences so that
+  ;; quotes inside regexes don't break syntax parsing.
+  (setq-local syntax-propertize-function #'rescript--syntax-propertize))
 
 
 ;;; Compilation Error Regexs
+;;;###autoload
 (eval-and-compile
   (defconst rescript--compilation-error-rx
     (rx-to-string
@@ -214,16 +250,18 @@
        line-end))))
 
 
-(add-to-list 'compilation-error-regexp-alist 'rescript-error)
-(add-to-list 'compilation-error-regexp-alist 'rescript-warning)
+;;;###autoload
+(with-eval-after-load 'compile
+  (add-to-list 'compilation-error-regexp-alist 'rescript-error)
+  (add-to-list 'compilation-error-regexp-alist 'rescript-warning)
 
-(add-to-list
-  'compilation-error-regexp-alist-alist
-  (cons 'rescript-error (cons rescript--compilation-error-rx '(2 3 4 2 1))))
+  (add-to-list
+    'compilation-error-regexp-alist-alist
+    (cons 'rescript-error (cons rescript--compilation-error-rx '(2 3 4 2 1))))
 
-(add-to-list
-  'compilation-error-regexp-alist-alist
-  (cons 'rescript-warning (cons rescript--compilation-warning-rx '(2 3 4 1 1))))
+  (add-to-list
+    'compilation-error-regexp-alist-alist
+    (cons 'rescript-warning (cons rescript--compilation-warning-rx '(2 3 4 1 1)))))
 
 
 
