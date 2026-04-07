@@ -3,11 +3,11 @@ for the [ReScript Language](https://rescript-lang.org/).
 
 New ReScript users are advised to use one of the [editors with official support
 from the ReScript
-team](https://rescript-lang.org/docs/manual/latest/editor-plugins).
+team](https://rescript-lang.org/docs/manual/editor-plugins).
 
 ## How to Get it Working
 
-Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/latest/installation) and this code, for a full setup you need:
+Apart from a working [ReScript install](https://rescript-lang.org/docs/manual/installation) and this code, for a full setup you need:
 
 * Strongly recommended: Emacs 27.0 or newer built with native JSON support, for LSP performance
 * The [ReScript language server](https://github.com/rescript-lang/rescript-vscode/tree/master/server), for type information, compiler errors, completion, and jump to definition/find references
