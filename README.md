@@ -194,6 +194,41 @@ Restart spacemacs (`SPC q r`) and open a ReScript `.res` file and you should
 have all the features working.
 
 
+### Tree-sitter mode
+
+There is also an experimental tree-sitter based major mode,
+`rescript-ts-mode`, for Emacs 29.1 and newer.
+
+When `rescript-ts-mode` is enabled and the ReScript tree-sitter grammar is not
+installed yet, the mode can prompt to install it automatically. The grammar is
+installed using Emacs' built-in `treesit-install-language-grammar` support from
+this upstream repository:
+
+- `https://github.com/rescript/tree-sitter-rescript`
+
+You can also install it manually with:
+
+- `M-x rescript-ts-install-grammar`
+
+A minimal configuration looks like this:
+
+```elisp
+(use-package rescript-mode
+  :mode ("\\.resi?\\'" . rescript-ts-mode))
+```
+
+If you prefer to keep using `rescript-mode` by default, you can still enable
+`rescript-ts-mode` manually in individual buffers.
+
+Useful customization options:
+
+- `rescript-ts-prompt-to-install-grammar`
+- `rescript-ts-grammar-source-url`
+- `rescript-ts-grammar-install-directory`
+
+If the grammar fails to load, `M-x rescript-ts-diagnose-grammar` prints the
+relevant tree-sitter settings and grammar availability information.
+
 ### Formatting and indentation
 
 #### Formatting vs. Indentation
@@ -350,13 +385,10 @@ See the github issues, but notably:
 
 
  Emacs support
-* [Indentation](#indentation) is a terrible hack and should very likely be
-  replaced with
-  [tree-sitter-rescript](https://github.com/nkrkv/tree-sitter-rescript/) and
-  [elisp-tree-sitter](https://github.com/emacs-tree-sitter/elisp-tree-sitter)
-  and [tree-sitter-indent](https://github.com/emacsmirror/tree-sitter-indent) --
-  probably very easy?  Perhaps this will also improve font-lock etc!
-* Font lock and indentation are broken for things like `let \"try" = true`.
+* Classic `rescript-mode` indentation is a terrible hack.
+  `rescript-ts-mode` should behave better here, but it is still experimental.
+* Classic `rescript-mode` font lock and indentation are broken for things like
+  `let \"try" = true`.
 * Formatting with `lsp-format-buffer` is broken because it does not correctly
   handle the response from rescript-vscode because it uses a range like
   `"end":{"line":1.7976931348623157e+308,"character":1.7976931348623157e+308}`

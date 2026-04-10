@@ -30,6 +30,29 @@
   :safe 'integerp
   :group 'rescript-ts)
 
+(defcustom rescript-ts-grammar-source-url
+  "https://github.com/rescript/tree-sitter-rescript"
+  "Git repository used by `rescript-ts-install-grammar'."
+  :type 'string
+  :group 'rescript-ts)
+
+(defcustom rescript-ts-grammar-install-directory nil
+  "Directory where `rescript-ts-install-grammar' installs the grammar.
+
+When nil, install to the standard tree-sitter directory under
+`user-emacs-directory'."
+  :type '(choice (const :tag "Default tree-sitter directory" nil)
+                 directory)
+  :group 'rescript-ts)
+
+(defcustom rescript-ts-prompt-to-install-grammar t
+  "Whether `rescript-ts-mode' should offer to install its grammar.
+
+When non-nil, calling `rescript-ts-mode' interactively prompts to install
+the ReScript tree-sitter grammar if it is missing."
+  :type 'boolean
+  :group 'rescript-ts)
+
 (defvar rescript-ts--indent-rules
   `((rescript
      ((parent-is "source_file") column-0 0)
@@ -75,7 +98,8 @@
    :language 'rescript
    '((string) @font-lock-string-face
      (template_string) @font-lock-string-face
-     (character) @font-lock-string-face)
+     (character) @font-lock-string-face
+     (regex) @font-lock-string-face)
 
    ;; Extension expressions like %re("/regex/") -- the extension_identifier
    ;; gets keyword face, and the string inside keeps its string face from above.
@@ -164,6 +188,53 @@
   "Feature list for font-locking in `rescript-ts-mode'.
 Each level adds more highlighting on top of the previous.")
 
+(defun rescript-ts-install-grammar (&optional out-dir)
+  "Install the ReScript tree-sitter grammar.
+
+If OUT-DIR is non-nil, install the grammar there.  Otherwise install it
+into `rescript-ts-grammar-install-directory' or Emacs' standard
+`tree-sitter' directory when that variable is nil."
+  (interactive
+   (list
+    (when current-prefix-arg
+      (read-directory-name "Install ReScript grammar to: "))))
+  (require 'treesit)
+  (setf (alist-get 'rescript treesit-language-source-alist)
+        rescript-ts-grammar-source-url)
+  (treesit-install-language-grammar
+   'rescript
+   (or out-dir rescript-ts-grammar-install-directory)))
+
+(defun rescript-ts-diagnose-grammar ()
+  "Show diagnostic information about the ReScript tree-sitter grammar."
+  (interactive)
+  (require 'treesit)
+  (message
+   "rescript available=%S ready=%S extra-load-path=%S override=%S source=%S"
+   (treesit-language-available-p 'rescript)
+   (treesit-ready-p 'rescript t)
+   treesit-extra-load-path
+   treesit-load-name-override-list
+   (alist-get 'rescript treesit-language-source-alist)))
+
+(defun rescript-ts--ensure-grammar ()
+  "Ensure the ReScript tree-sitter grammar is available."
+  (or (treesit-ready-p 'rescript)
+      (when (and rescript-ts-prompt-to-install-grammar
+                 (called-interactively-p 'interactive)
+                 (y-or-n-p
+                  (concat
+                   "ReScript tree-sitter grammar is missing. "
+                   "Install it now? ")))
+        (condition-case err
+            (progn
+              (rescript-ts-install-grammar)
+              (treesit-ready-p 'rescript))
+          (error
+           (user-error
+            "Failed to install ReScript tree-sitter grammar: %s"
+            (error-message-string err)))))))
+
 ;;;###autoload
 (define-derived-mode rescript-ts-mode prog-mode "ReScript"
   "Major mode for editing ReScript, powered by tree-sitter.
@@ -175,8 +246,11 @@ Each level adds more highlighting on top of the previous.")
                   (modify-syntax-entry ?* ". 23n" table)
                   (modify-syntax-entry ?\n "> b" table)
                   table)
-  (unless (treesit-ready-p 'rescript)
-    (error "Tree-sitter grammar for ReScript is not available"))
+  (unless (rescript-ts--ensure-grammar)
+    (error
+     (concat
+      "Tree-sitter grammar for ReScript is not available. "
+      "Run M-x rescript-ts-install-grammar to install it")))
 
   (treesit-parser-create 'rescript)
 
@@ -206,10 +280,9 @@ Each level adds more highlighting on top of the previous.")
 
   (treesit-major-mode-setup))
 
-;; NOTE: Not auto-enabled yet because the tree-sitter grammar does not
-;; support `dict' syntax (ReScript v11.1+), causing cascading parse
-;; errors.  Enable manually with M-x rescript-ts-mode, or uncomment
-;; the form below once the grammar is updated.
+;; NOTE: Not auto-enabled yet.
+;; Enable manually with M-x rescript-ts-mode, or uncomment
+;; the form below if you want to use it for all .res/.resi buffers.
 ;;
 ;; ;;;###autoload
 ;; (if (treesit-ready-p 'rescript t)
