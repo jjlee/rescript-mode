@@ -132,7 +132,7 @@ break string parsing."
 (defconst rescript--special-types
   '("int" "float" "string" "char"
     "bool" "unit" "list" "dict" "array" "exn"
-    "option" "ref"))
+    "option" "ref" "promise" "result"))
 
 (defconst rescript--camel-case
   (rx symbol-start
