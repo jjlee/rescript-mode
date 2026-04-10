@@ -136,7 +136,8 @@ fontify within START and END."
    :feature 'builtin
    :language 'rescript
    :override t
-   '((type_identifier) @rescript-ts--fontify-builtin-collection
+   '((unit_type) @font-lock-builtin-face
+     (type_identifier) @rescript-ts--fontify-builtin-collection
      (dict) @rescript-ts--fontify-builtin-collection
      (dict_pattern) @rescript-ts--fontify-builtin-collection
      (list) @rescript-ts--fontify-builtin-collection
