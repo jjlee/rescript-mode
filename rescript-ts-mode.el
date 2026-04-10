@@ -31,9 +31,14 @@
   :group 'rescript-ts)
 
 (defcustom rescript-ts-grammar-source-url
-  "https://github.com/rescript/tree-sitter-rescript"
-  "Git repository used by `rescript-ts-install-grammar'."
-  :type 'string
+  "https://github.com/rescript-lang/tree-sitter-rescript"
+  "Source used by `rescript-ts-install-grammar'.
+
+This may be either a Git repository URL string or a full recipe list
+compatible with `treesit-language-source-alist'."
+  :type '(choice string
+                 (repeat :tag "Tree-sitter source recipe"
+                         (choice string sexp)))
   :group 'rescript-ts)
 
 (defcustom rescript-ts-grammar-install-directory nil
@@ -225,6 +230,20 @@ fontify within START and END."
   "Feature list for font-locking in `rescript-ts-mode'.
 Each level adds more highlighting on top of the previous.")
 
+(defun rescript-ts--grammar-source-recipe ()
+  "Return the tree-sitter source recipe for ReScript."
+  (if (listp rescript-ts-grammar-source-url)
+      rescript-ts-grammar-source-url
+    (list rescript-ts-grammar-source-url)))
+
+(defun rescript-ts--register-language-source ()
+  "Register the ReScript tree-sitter grammar source recipe."
+  (setf (alist-get 'rescript treesit-language-source-alist nil nil #'eq)
+        (rescript-ts--grammar-source-recipe)))
+
+(rescript-ts--register-language-source)
+
+;;;###autoload
 (defun rescript-ts-install-grammar (&optional out-dir)
   "Install the ReScript tree-sitter grammar.
 
@@ -236,12 +255,16 @@ into `rescript-ts-grammar-install-directory' or Emacs' standard
     (when current-prefix-arg
       (read-directory-name "Install ReScript grammar to: "))))
   (require 'treesit)
-  (setf (alist-get 'rescript treesit-language-source-alist)
-        rescript-ts-grammar-source-url)
-  (treesit-install-language-grammar
-   'rescript
-   (or out-dir rescript-ts-grammar-install-directory)))
+  (rescript-ts--register-language-source)
+  (let ((install-dir (or out-dir
+                         rescript-ts-grammar-install-directory
+                         (expand-file-name "tree-sitter" user-emacs-directory))))
+    (make-directory install-dir t)
+    (treesit-install-language-grammar
+     'rescript
+     install-dir)))
 
+;;;###autoload
 (defun rescript-ts-diagnose-grammar ()
   "Show diagnostic information about the ReScript tree-sitter grammar."
   (interactive)
@@ -252,7 +275,7 @@ into `rescript-ts-grammar-install-directory' or Emacs' standard
    (treesit-ready-p 'rescript t)
    treesit-extra-load-path
    treesit-load-name-override-list
-   (alist-get 'rescript treesit-language-source-alist)))
+   (alist-get 'rescript treesit-language-source-alist nil nil #'eq)))
 
 (defun rescript-ts--ensure-grammar ()
   "Ensure the ReScript tree-sitter grammar is available."

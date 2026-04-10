@@ -204,7 +204,7 @@ installed yet, the mode can prompt to install it automatically. The grammar is
 installed using Emacs' built-in `treesit-install-language-grammar` support from
 this upstream repository:
 
-- `https://github.com/rescript/tree-sitter-rescript`
+- `https://github.com/rescript-lang/tree-sitter-rescript`
 
 You can also install it manually with:
 
