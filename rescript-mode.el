@@ -113,7 +113,7 @@ break string parsing."
 (defconst rescript--keywords
   '("and" "as" "assert" "async" "await"
     "constraint"
-    "else" "exception" "export" "external"
+    "dict{" "else" "exception" "export" "external"
     "false" "for"
     "if" "import" "in" "include"
     "lazy" "let" "list{"
@@ -131,7 +131,7 @@ break string parsing."
 
 (defconst rescript--special-types
   '("int" "float" "string" "char"
-    "bool" "unit" "list" "array" "exn"
+    "bool" "unit" "list" "dict" "array" "exn"
     "option" "ref"))
 
 (defconst rescript--camel-case

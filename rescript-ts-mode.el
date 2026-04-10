@@ -86,6 +86,25 @@ the ReScript tree-sitter grammar if it is missing."
      (no-node parent-bol 0)))
   "Tree-sitter indentation rules for ReScript.")
 
+(defun rescript-ts--fontify-builtin-collection (node override start end &rest _)
+  "Fontify collection builtins represented by NODE.
+
+Highlight `list' and `dict' consistently in both type positions and
+constructor forms like `list{}' and `dict{}'.  Respect OVERRIDE and only
+fontify within START and END."
+  (let* ((node-start (treesit-node-start node))
+         (node-end (treesit-node-end node))
+         (text (buffer-substring-no-properties node-start node-end))
+         (limit (cond
+                 ((string-prefix-p "list" text) (+ node-start 4))
+                 ((string-prefix-p "dict" text) (+ node-start 4)))))
+    (when limit
+      (treesit-fontify-with-override
+       (max node-start start)
+       (min limit end)
+       'font-lock-builtin-face
+       override))))
+
 (defvar rescript-ts--font-lock-settings
   (treesit-font-lock-rules
    ;; Comments
@@ -107,6 +126,16 @@ the ReScript tree-sitter grammar if it is missing."
    :language 'rescript
    '((extension_expression
       (extension_identifier) @font-lock-preprocessor-face))
+
+   ;; Builtin collection constructors and types
+   :feature 'builtin
+   :language 'rescript
+   :override t
+   '((type_identifier) @rescript-ts--fontify-builtin-collection
+     (dict) @rescript-ts--fontify-builtin-collection
+     (dict_pattern) @rescript-ts--fontify-builtin-collection
+     (list) @rescript-ts--fontify-builtin-collection
+     (list_pattern) @rescript-ts--fontify-builtin-collection)
 
    ;; Numbers
    :feature 'number
@@ -182,7 +211,7 @@ the ReScript tree-sitter grammar if it is missing."
 
 (defvar rescript-ts--font-lock-feature-list
   '((comment string)
-    (keyword type constant number)
+    (keyword type builtin constant number)
     (function constructor decorator extension property)
     (operator escape-sequence))
   "Feature list for font-locking in `rescript-ts-mode'.
