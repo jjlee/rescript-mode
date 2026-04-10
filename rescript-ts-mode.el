@@ -180,6 +180,14 @@ fontify within START and END."
       function: (value_identifier_path
                  (value_identifier) @font-lock-function-call-face)))
 
+   ;; Parameters
+   :feature 'parameter
+   :language 'rescript
+   '((parameter (value_identifier) @font-lock-variable-name-face)
+     (parameter
+      (labeled_parameter
+       (value_identifier) @font-lock-variable-name-face)))
+
    ;; Variant constructors
    :feature 'constructor
    :language 'rescript
@@ -212,7 +220,7 @@ fontify within START and END."
 (defvar rescript-ts--font-lock-feature-list
   '((comment string)
     (keyword type builtin constant number)
-    (function constructor decorator extension property)
+    (function parameter constructor decorator extension property)
     (operator escape-sequence))
   "Feature list for font-locking in `rescript-ts-mode'.
 Each level adds more highlighting on top of the previous.")
