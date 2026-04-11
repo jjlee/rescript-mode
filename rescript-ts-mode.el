@@ -24,6 +24,11 @@
   :prefix "rescript-ts-"
   :group 'languages)
 
+(defface rescript-ts-jsx-attribute-face
+  '((t :inherit font-lock-variable-name-face))
+  "Face for JSX attribute names in `rescript-ts-mode'."
+  :group 'rescript-ts)
+
 (defcustom rescript-ts-indent-offset 2
   "Number of spaces for each indentation step in `rescript-ts-mode'."
   :type 'integer
@@ -123,14 +128,20 @@ fontify within START and END."
    '((string) @font-lock-string-face
      (template_string) @font-lock-string-face
      (character) @font-lock-string-face
-     (regex) @font-lock-string-face)
+     (regex) @font-lock-regexp-face)
 
-   ;; Extension expressions like %re("/regex/") -- the extension_identifier
-   ;; gets keyword face, and the string inside keeps its string face from above.
+   ;; Extension expressions like %re("...")
    :feature 'extension
    :language 'rescript
+   :override t
    '((extension_expression
-      (extension_identifier) @font-lock-preprocessor-face))
+      "%" @font-lock-keyword-face
+      (extension_identifier) @font-lock-keyword-face)
+     ((extension_expression
+       (extension_identifier) @ext-id
+       (expression_statement
+        (string) @font-lock-regexp-face))
+      (:match "re" @ext-id)))
 
    ;; Builtin collection constructors and types
    :feature 'builtin
@@ -166,8 +177,7 @@ fontify within START and END."
    :language 'rescript
    '((true) @font-lock-constant-face
      (false) @font-lock-constant-face
-     (unit) @font-lock-constant-face
-     (polyvar) @font-lock-constant-face)
+     (unit) @font-lock-constant-face)
 
    ;; Types
    :feature 'type
@@ -190,14 +200,35 @@ fontify within START and END."
    :feature 'parameter
    :language 'rescript
    '((parameter (value_identifier) @font-lock-variable-name-face)
+     (labeled_parameter (value_identifier) @font-lock-variable-name-face)
+     (function parameter: (value_identifier) @font-lock-variable-name-face)
      (parameter
-      (labeled_parameter
-       (value_identifier) @font-lock-variable-name-face)))
+      (tuple_pattern
+       (tuple_item_pattern
+        (value_identifier) @font-lock-variable-name-face)))
+     (parameter
+      (array_pattern
+       (value_identifier) @font-lock-variable-name-face))
+     (parameter
+      (record_pattern
+       (value_identifier) @font-lock-variable-name-face))
+     (parameter
+      (list_pattern
+       (value_identifier) @font-lock-variable-name-face))
+     (parameter
+      (list_pattern
+       (spread_pattern
+        (value_identifier) @font-lock-variable-name-face))))
 
    ;; Variant constructors
    :feature 'constructor
    :language 'rescript
-   '((variant_identifier) @font-lock-type-face)
+   :override t
+   '((variant_identifier) @font-lock-type-face
+     (polyvar_identifier) @font-lock-type-face
+     (polyvar) @font-lock-type-face
+     (polyvar_string) @font-lock-type-face
+     (polyvar_type_pattern "#" @font-lock-type-face))
 
    ;; Decorators like @module, @scope, @send, etc.
    :feature 'decorator
@@ -208,8 +239,25 @@ fontify within START and END."
    :feature 'property
    :language 'rescript
    :override t
-   '((record_type_field (property_identifier) @font-lock-variable-name-face)
-     (record_field (property_identifier) @font-lock-variable-name-face))
+   '((dict_entry (string) @font-lock-property-name-face (_))
+     (dict_pattern_entry (string) @font-lock-property-name-face (_))
+     (record_type_field (property_identifier) @font-lock-property-name-face)
+     (record_field (property_identifier) @font-lock-property-name-face)
+     (object (field (property_identifier) @font-lock-property-name-face (_)))
+     (object_type (field (property_identifier) @font-lock-property-name-face (_))))
+
+   ;; JSX
+   :feature 'jsx
+   :language 'rescript
+   :override t
+   '((jsx_identifier) @font-lock-type-face
+     (jsx_attribute (property_identifier) @rescript-ts-jsx-attribute-face)
+     (jsx_element
+      open_tag: (jsx_opening_element ["<" ">"] @font-lock-bracket-face))
+     (jsx_element
+      close_tag: (jsx_closing_element ["<" "/" ">"] @font-lock-bracket-face))
+     (jsx_self_closing_element ["/" ">" "<"] @font-lock-bracket-face)
+     (jsx_fragment [">" "<" "/"] @font-lock-bracket-face))
 
    ;; Operators
    :feature 'operator
@@ -226,7 +274,7 @@ fontify within START and END."
 (defvar rescript-ts--font-lock-feature-list
   '((comment string)
     (keyword type builtin constant number)
-    (function parameter constructor decorator extension property)
+    (function parameter constructor decorator extension property jsx)
     (operator escape-sequence))
   "Feature list for font-locking in `rescript-ts-mode'.
 Each level adds more highlighting on top of the previous.")
