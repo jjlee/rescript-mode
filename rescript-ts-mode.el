@@ -120,7 +120,7 @@ fontify within START and END."
    ;; Comments
    :feature 'comment
    :language 'rescript
-   '((comment) @font-lock-comment-face)
+   '([(line_comment) (block_comment)] @font-lock-comment-face)
 
    ;; Strings
    :feature 'string
